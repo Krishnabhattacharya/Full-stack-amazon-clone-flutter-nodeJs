@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:amazon_clone/services/ApiServices/Sharedservices.dart';
+import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';
 import 'package:dio/dio.dart';
 
 Dio dio = Dio();

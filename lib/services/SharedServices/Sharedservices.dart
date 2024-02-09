@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:amazon_clone/services/ApiServices/Preferences.dart';
+import 'package:amazon_clone/model/Auth_models/login_model.dart';
+import 'package:amazon_clone/services/SharedServices/Preferences.dart';
 import 'package:flutter/material.dart';
 
 //**************************************************************************** *//
@@ -17,20 +18,20 @@ import 'package:flutter/material.dart';
 
 class SharedServices {
 //set all the login details-----------------------------------
-  // static Future<void> setLoginDetails(LoginModel? usermodel) async {
-  //   if (usermodel != null) {
-  //     preferences!.setString("login_details", jsonEncode(usermodel.toJson()));
-  //   }
-  // }
+  static Future<void> setLoginDetails(LoginModel? usermodel) async {
+    if (usermodel != null) {
+      preferences!.setString("login_details", jsonEncode(usermodel.toJson()));
+    }
+  }
 
 // get the login details------------------------------------
-  // static LoginModel? getLoginDetails() {
-  //   String? jsonDetails = preferences!.getString("login_details");
-  //   if (jsonDetails != null) {
-  //     return LoginModel.fromJson(jsonDecode(jsonDetails));
-  //   }
-  //   return null;
-  // }
+  static LoginModel? getLoginDetails() {
+    String? jsonDetails = preferences!.getString("login_details");
+    if (jsonDetails != null) {
+      return LoginModel.fromJson(jsonDecode(jsonDetails));
+    }
+    return null;
+  }
 
 //for login check//----------------------------------------
   static bool isLoggedIn() {

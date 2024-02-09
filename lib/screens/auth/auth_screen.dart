@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 import 'package:amazon_clone/constant/global_variable.dart';
+import 'package:amazon_clone/screens/home/home_screen.dart';
 import 'package:amazon_clone/services/ApiServices/ApiServices.dart';
 import 'package:amazon_clone/services/provider/auth_provider.dart';
+import 'package:amazon_clone/widgets/bottom_bar.dart';
 import 'package:amazon_clone/widgets/custom_button.dart';
 import 'package:amazon_clone/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
@@ -32,169 +34,271 @@ class _AuthScreenState extends State<AuthScreen> {
     pass.dispose();
   }
 
+  void showSnackbar(BuildContext contextc, String content) {
+    final snack = SnackBar(
+      content: Text(
+        content,
+        style: TextStyle(color: Colors.red),
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snack);
+  }
+
   @override
   Widget build(BuildContext context) {
     log("rebuild");
 
-    return Scaffold(
-      backgroundColor: GlobalVariables.greyBackgroundCOlor,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Consumer<AuthProvider>(
-            builder: (context, authP, child) {
-              Auth currentAuth = authP.auth;
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: GlobalVariables.greyBackgroundCOlor,
+        body: Consumer<AuthProvider>(
+          builder: (context, authP, child) {
+            Auth currentAuth = authP.auth;
 
-              return Column(
+            return SingleChildScrollView(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Center(
+                    child: Container(
+                      height: 40,
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+                          color: GlobalVariables.greyBackgroundCOlor,
+                          boxShadow: [
+                            BoxShadow(
+                                color: Color.fromARGB(255, 197, 197, 197),
+                                blurRadius: 1,
+                                blurStyle: BlurStyle.normal,
+                                offset: Offset(0, 1)),
+                          ]),
+                      child: Image.asset(
+                        "assets/images/amazon_in.png",
+                        fit: BoxFit.fitHeight,
+                      ),
+                    ),
+                  ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 10.0, right: 10),
+                    padding: const EdgeInsets.only(
+                        left: 14.0, right: 10, top: 10, bottom: 5),
                     child: Text(
                       "welcome",
                       style: TextStyle(
                           fontSize: 22.sp, fontWeight: FontWeight.w500),
                     ),
                   ),
-                  ListTile(
-                    tileColor: currentAuth == Auth.singup
-                        ? GlobalVariables.backgroundColor
-                        : GlobalVariables.greyBackgroundCOlor,
-                    title: Text(
-                      "Create Account",
-                      style: TextStyle(
-                          fontSize: 14.sp, fontWeight: FontWeight.bold),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 10.0,
+                      right: 10,
                     ),
-                    leading: Radio(
-                      activeColor: GlobalVariables.secondaryColor,
-                      value: Auth.singup,
-                      groupValue: currentAuth,
-                      onChanged: (Auth? value) {
-                        authP.setAuth(value!);
-                      },
+                    child: ListTile(
+                      tileColor: currentAuth == Auth.singup
+                          ? GlobalVariables.backgroundColor
+                          : GlobalVariables.greyBackgroundCOlor,
+                      title: Text(
+                        "Create Account",
+                        style: TextStyle(
+                            fontSize: 14.sp, fontWeight: FontWeight.bold),
+                      ),
+                      leading: Radio(
+                        activeColor: GlobalVariables.secondaryColor,
+                        value: Auth.singup,
+                        groupValue: currentAuth,
+                        onChanged: (Auth? value) {
+                          authP.setAuth(value!);
+                        },
+                      ),
                     ),
                   ),
                   if (currentAuth == Auth.singup)
-                    Container(
-                      padding: const EdgeInsets.only(left: 10.0, right: 10),
-                      color: Colors.white,
-                      child: Form(
-                          key: signupKey,
-                          child: Column(
-                            children: [
-                              CustomTextFormField(
-                                contentPadding: 16,
-                                controller: name,
-                                label: "Name",
-                                context: context,
-                                borderRadius: 0,
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              CustomTextFormField(
-                                contentPadding: 16,
-                                controller: email,
-                                label: "Email",
-                                context: context,
-                                borderRadius: 0,
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              CustomTextFormField(
-                                contentPadding: 16,
-                                controller: pass,
-                                label: "Password",
-                                context: context,
-                                borderRadius: 0,
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              CustomButton(
-                                  color: GlobalVariables.secondaryColor,
-                                  text: "Sign Up",
-                                  onTap: () async {
-                                    await Apiservices.signupUser(
-                                      name: name.text,
-                                      email: email.text,
-                                      password: pass.text,
-                                    );
-                                  }),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                            ],
-                          )),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 10.0,
+                        right: 10,
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10),
+                        color: Colors.white,
+                        child: Form(
+                            key: signupKey,
+                            child: Column(
+                              children: [
+                                CustomTextFormField(
+                                  contentPadding: 16,
+                                  controller: name,
+                                  label: "Name",
+                                  context: context,
+                                  borderRadius: 0,
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                CustomTextFormField(
+                                  contentPadding: 16,
+                                  controller: email,
+                                  label: "Email",
+                                  context: context,
+                                  borderRadius: 0,
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                CustomTextFormField(
+                                  contentPadding: 16,
+                                  controller: pass,
+                                  label: "Password",
+                                  context: context,
+                                  borderRadius: 0,
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                CustomButton(
+                                    color: GlobalVariables.secondaryColor,
+                                    text: "Sign Up",
+                                    onTap: () async {
+                                      if (name.text.isEmpty ||
+                                          email.text.isEmpty ||
+                                          pass.text.isEmpty) {
+                                        showSnackbar(context,
+                                            "Please Enter all Details");
+                                      }
+                                      await Apiservices.signupUser(
+                                          name: name.text,
+                                          email: email.text,
+                                          password: pass.text,
+                                          context: context);
+                                    }),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                              ],
+                            )),
+                      ),
                     ),
-                  ListTile(
-                    tileColor: currentAuth == Auth.signin
-                        ? GlobalVariables.backgroundColor
-                        : GlobalVariables.greyBackgroundCOlor,
-                    title: Text(
-                      "Sign-In",
-                      style: TextStyle(
-                          fontSize: 14.sp, fontWeight: FontWeight.bold),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 10.0,
+                      right: 10,
                     ),
-                    leading: Radio(
-                      activeColor: GlobalVariables.secondaryColor,
-                      value: Auth.signin,
-                      groupValue: currentAuth,
-                      onChanged: (Auth? value) {
-                        authP.setAuth(value!);
-                      },
+                    child: ListTile(
+                      tileColor: currentAuth == Auth.signin
+                          ? GlobalVariables.backgroundColor
+                          : GlobalVariables.greyBackgroundCOlor,
+                      title: Text(
+                        "Sign-In",
+                        style: TextStyle(
+                            fontSize: 14.sp, fontWeight: FontWeight.bold),
+                      ),
+                      leading: Radio(
+                        activeColor: GlobalVariables.secondaryColor,
+                        value: Auth.signin,
+                        groupValue: currentAuth,
+                        onChanged: (Auth? value) {
+                          authP.setAuth(value!);
+                        },
+                      ),
                     ),
                   ),
                   if (currentAuth == Auth.signin)
-                    Container(
-                      padding: const EdgeInsets.only(left: 10.0, right: 10),
-                      color: Colors.white,
-                      child: Form(
-                          key: signupKey,
-                          child: Column(
-                            children: [
-                              CustomTextFormField(
-                                contentPadding: 16,
-                                controller: name,
-                                label: "Name",
-                                context: context,
-                                borderRadius: 0,
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              CustomTextFormField(
-                                contentPadding: 16,
-                                controller: email,
-                                label: "Email",
-                                context: context,
-                                borderRadius: 0,
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              CustomTextFormField(
-                                contentPadding: 16,
-                                controller: pass,
-                                label: "Password",
-                                context: context,
-                                borderRadius: 0,
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              CustomButton(
-                                  color: GlobalVariables.secondaryColor,
-                                  text: "Sign In",
-                                  onTap: () {})
-                            ],
-                          )),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 10.0,
+                        right: 10,
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10),
+                        color: Colors.white,
+                        child: Form(
+                            key: signupKey,
+                            child: Column(
+                              children: [
+                                CustomTextFormField(
+                                  contentPadding: 16,
+                                  controller: email,
+                                  label: "Email",
+                                  context: context,
+                                  borderRadius: 0,
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                CustomTextFormField(
+                                  contentPadding: 16,
+                                  controller: pass,
+                                  label: "Password",
+                                  context: context,
+                                  borderRadius: 0,
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                CustomButton(
+                                    color: GlobalVariables.secondaryColor,
+                                    text: "Sign In",
+                                    onTap: () {
+                                      Apiservices.loginUser(
+                                              email: email.text,
+                                              password: pass.text)
+                                          .then((value) {
+                                        if (value) {
+                                          Navigator.pushNamedAndRemoveUntil(
+                                              context,
+                                              BottomBar.routeName,
+                                              (route) => false);
+                                        }
+                                      });
+                                    })
+                              ],
+                            )),
+                      ),
                     ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 0.1.sh, left: 10, right: 10),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              "Condition of use",
+                              style: TextStyle(
+                                  color: Colors.blue[800],
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            Text(
+                              "Privacy Notice",
+                              style: TextStyle(
+                                  color: Colors.blue[800],
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            Text(
+                              "Help",
+                              style: TextStyle(
+                                  color: Colors.blue[800],
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        const Text(
+                          "© 1996-2024, Amazon.com Inc or its affilates.",
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 156, 156, 156)),
+                        )
+                      ],
+                    ),
+                  )
                 ],
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
       ),
     );

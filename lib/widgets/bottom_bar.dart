@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:amazon_clone/constant/global_variable.dart';
 import 'package:amazon_clone/screens/account/account_screen.dart';
+import 'package:amazon_clone/screens/home/home_screen.dart';
 import 'package:amazon_clone/services/provider/bottom_bar_index_change_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,7 @@ class BottomBar extends StatefulWidget {
 
 class _BottomBarState extends State<BottomBar> {
   List screens = [
-    Container(),
+    HomePage(),
     AccountScreen(),
     Container(),
     Container(),

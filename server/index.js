@@ -4,6 +4,7 @@ import colors from "colors";
 import authRoute from './src/routes/userRoutes.js';
 import db from './src/db/mongoose.js';
 import morgan from 'morgan';
+import adminRoute from './src/routes/adminRoute.js';
 
 
 dotenv.config();
@@ -12,6 +13,7 @@ const app = express();
 
 app.use(express.json());
 app.use("/api/auth", authRoute);
+app.use(adminRoute);
 app.use(morgan("dev"));
 db();
 

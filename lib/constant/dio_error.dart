@@ -4,23 +4,25 @@ import 'package:dio/dio.dart';
 
 class DioErrorHandling {
   static String? handleDioError(DioException error) {
-    String? errorMessge;
+    String? errorMessage;
     if (error.response != null) {
       final res = error.response!;
       log("Error Response Data: ${res.data}");
-      errorMessge = res.data['message'];
-      log("Error Status Code: ${res.statusCode}");
-      if (res.statusCode == 500) {
-        final Map<String, dynamic>? responseData =
-            res.data as Map<String, dynamic>?;
+      final responseData = res.data;
 
-        if (responseData != null && responseData.containsKey("message")) {
-          log("Error Message: ${responseData['message']}");
+      if (responseData is Map<String, dynamic> &&
+          responseData.containsKey('message')) {
+        final dynamic messageValue = responseData['message'];
+        if (messageValue is String) {
+          errorMessage = messageValue;
+          log("Error Message: $errorMessage");
+        } else {
+          log("Unexpected 'message' field type: $messageValue");
         }
+      } else {
+        log("Response does not contain a 'message' field");
       }
-    } else {
-      log("DioError: $error");
     }
-    return errorMessge;
+    return errorMessage;
   }
 }

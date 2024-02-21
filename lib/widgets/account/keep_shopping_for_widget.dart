@@ -3,14 +3,14 @@ import 'package:amazon_clone/widgets/account/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class Orders extends StatefulWidget {
-  const Orders({super.key});
+class KeepShoppingFor extends StatefulWidget {
+  const KeepShoppingFor({super.key});
 
   @override
-  State<Orders> createState() => _OrdersState();
+  State<KeepShoppingFor> createState() => _KeepShoppingFor();
 }
 
-class _OrdersState extends State<Orders> {
+class _KeepShoppingFor extends State<KeepShoppingFor> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -21,7 +21,7 @@ class _OrdersState extends State<Orders> {
             Container(
               padding: const EdgeInsets.only(left: 15, top: 20),
               child: const Text(
-                "Your Orders",
+                "Keep shopping for",
                 style: TextStyle(
                     fontSize: 18,
                     color: Colors.black,
@@ -31,7 +31,7 @@ class _OrdersState extends State<Orders> {
             Container(
               padding: const EdgeInsets.only(right: 15, top: 20),
               child: Text(
-                "See more",
+                "Browsing history",
                 style: TextStyle(
                     fontSize: 15,
                     color: GlobalVariables.selectedNavBarColor,

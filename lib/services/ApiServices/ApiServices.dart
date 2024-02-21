@@ -5,6 +5,7 @@ import 'package:amazon_clone/constant/dio_error.dart';
 import 'package:amazon_clone/model/Auth_models/login_model.dart';
 import 'package:amazon_clone/services/ApiServices/ApiBaseServices.dart';
 import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +13,7 @@ class Apiservices {
   static Future<bool> loginUser({
     required String email,
     required String password,
+    required BuildContext context,
   }) async {
     bool res = false;
     LoginModel node = LoginModel();

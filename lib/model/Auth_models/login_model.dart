@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
 LoginModel loginModelFromJson(String str) =>
     LoginModel.fromJson(json.decode(str));
 

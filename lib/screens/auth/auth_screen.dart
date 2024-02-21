@@ -1,9 +1,12 @@
 import 'dart:developer';
 
 import 'package:amazon_clone/constant/global_variable.dart';
-import 'package:amazon_clone/screens/home/home_screen.dart';
+import 'package:amazon_clone/screens/admin/screen/admin_screen.dart';
+
 import 'package:amazon_clone/services/ApiServices/ApiServices.dart';
+import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';
 import 'package:amazon_clone/services/provider/auth_provider.dart';
+import 'package:amazon_clone/services/provider/radio_button_state_change.dart';
 import 'package:amazon_clone/widgets/bottom_bar.dart';
 import 'package:amazon_clone/widgets/custom_button.dart';
 import 'package:amazon_clone/widgets/custom_text_form_field.dart';
@@ -51,7 +54,7 @@ class _AuthScreenState extends State<AuthScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: GlobalVariables.greyBackgroundCOlor,
-        body: Consumer<AuthProvider>(
+        body: Consumer<RadioButtonStateChange>(
           builder: (context, authP, child) {
             Auth currentAuth = authP.auth;
 
@@ -239,14 +242,40 @@ class _AuthScreenState extends State<AuthScreen> {
                                     text: "Sign In",
                                     onTap: () {
                                       Apiservices.loginUser(
+                                              context: context,
                                               email: email.text,
                                               password: pass.text)
                                           .then((value) {
                                         if (value) {
-                                          Navigator.pushNamedAndRemoveUntil(
-                                              context,
-                                              BottomBar.routeName,
-                                              (route) => false);
+                                          // Navigator.pushNamedAndRemoveUntil(
+                                          //     context,
+                                          //     BottomBar.routeName,
+                                          //     (route) => false);
+                                          if (value) {
+                                            // Check the user type from AuthProvider
+                                            final type = SharedServices
+                                                    .getLoginDetails()!
+                                                .user!
+                                                .type!
+                                                .toLowerCase();
+                                            if (type == "admin") {
+                                              // User is logged in and is an admin, navigate to AdminScreen
+                                              Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const AdminScreen()),
+                                              );
+                                            } else {
+                                              // User is logged in but not an admin, navigate to BottomBar
+                                              Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const BottomBar()),
+                                              );
+                                            }
+                                          }
                                         }
                                       });
                                     })

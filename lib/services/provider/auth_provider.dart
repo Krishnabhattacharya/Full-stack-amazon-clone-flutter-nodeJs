@@ -1,13 +1,14 @@
+import 'package:amazon_clone/model/Auth_models/login_model.dart';
 import 'package:flutter/material.dart';
 
-enum Auth { signin, singup }
-
 class AuthProvider extends ChangeNotifier {
-  Auth _auth = Auth.singup;
-  Auth get auth => _auth;
-
-  void setAuth(Auth val) {
-    _auth = val;
+  LoginModel? _loginModel;
+  LoginModel? get loginmodel => _loginModel;
+  void setLoginDetails(LoginModel loginmodel) {
+    _loginModel = loginmodel;
     notifyListeners();
   }
+
+  bool get isLogin => _loginModel != null;
+  bool get isadmin => _loginModel?.user?.type?.toLowerCase() == 'admin';
 }

@@ -1,6 +1,7 @@
 import 'package:amazon_clone/constant/global_variable.dart';
 import 'package:amazon_clone/widgets/account/account_button.dart';
 import 'package:amazon_clone/widgets/account/bellow_app_bar.dart';
+import 'package:amazon_clone/widgets/account/keep_shopping_for_widget.dart';
 import 'package:amazon_clone/widgets/account/orders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -44,31 +45,51 @@ class AccountScreen extends StatelessWidget {
           )),
         ),
       ),
-      body: Column(
-        children: [
-          const BellowBottomBar(),
-          const SizedBox(
-            height: 7,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              AccountButton(text: "Your orders", onTap: () {}),
-              AccountButton(text: "Buy Again", onTap: () {}),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              AccountButton(text: "Your Account", onTap: () {}),
-              AccountButton(text: "Your Lists", onTap: () {}),
-            ],
-          ),
-          const Orders(),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const BellowBottomBar(),
+            const SizedBox(
+              height: 7,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                AccountButton(text: "Your orders", onTap: () {}),
+                AccountButton(text: "Buy Again", onTap: () {}),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                AccountButton(text: "Your Account", onTap: () {}),
+                AccountButton(text: "Your Lists", onTap: () {}),
+              ],
+            ),
+            const Orders(),
+            const KeepShoppingFor(),
+            const SizedBox(
+              height: 10,
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  AccountButton(text: "Manage Profile", onTap: () {}),
+                  AccountButton(text: "Yours Orders", onTap: () {}),
+                  AccountButton(text: "Yours Address", onTap: () {}),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,10 +1,10 @@
 import 'package:amazon_clone/constant/global_variable.dart';
 import 'package:amazon_clone/route.dart';
-import 'package:amazon_clone/screens/admin/screen/admin_screen.dart';
+import 'package:amazon_clone/admin/screen/admin_screen.dart';
 import 'package:amazon_clone/screens/auth/auth_screen.dart';
-
 import 'package:amazon_clone/services/SharedServices/Preferences.dart';
 import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';
+import 'package:amazon_clone/services/provider/admin_add_product_screen_isprograssing_change.dart';
 import 'package:amazon_clone/services/provider/auth_provider.dart';
 import 'package:amazon_clone/services/provider/radio_button_state_change.dart';
 import 'package:amazon_clone/services/provider/bottom_bar_index_change_provider.dart';
@@ -29,7 +29,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => RadioButtonStateChange()),
         ChangeNotifierProvider(create: (context) => BottobarIndexChange()),
-        ChangeNotifierProvider(create: (context) => AuthProvider())
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => IsprograssingChange())
       ],
       child: ScreenUtilInit(
           designSize: const Size(360, 690),

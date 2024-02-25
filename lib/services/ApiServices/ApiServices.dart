@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:amazon_clone/constant/dio_error.dart';
+
+import 'package:amazon_clone/model/get_product_model.dart';
 import 'package:amazon_clone/model/Auth_models/login_model.dart';
 import 'package:amazon_clone/services/ApiServices/ApiBaseServices.dart';
 import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';
@@ -32,29 +34,47 @@ class Apiservices {
       }
       return res;
     } catch (e) {
-      log("Exception while login === $e");
+      if (e is DioException) {
+        final errorMessage = DioErrorHandling.handleDioError(e);
+        Future.delayed(Duration.zero, () {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(errorMessage.toString())));
+        });
+      } else {
+        log("Exception: $e");
+      }
       return false;
     }
   }
 
-//---------------------------------------------------------------------------------------------------------
-  // static Future<GetUserDataModel> getuserdata() async {
-  //   GetUserDataModel getuserDataModel = GetUserDataModel();
-  //   try {
-  //     final response = await ApiBaseServices.getRequestWithHeaders(
-  //         endPoint: "/user/getUserData");
-  //     //  log(response.statusCode.toString());
-  //     if (response.statusCode == 200) {
-  //       //log(response.body);
-  //       getuserDataModel = getUserDataModelFromJson(response.body);
-  //       return getuserDataModel;
-  //     }
-  //     return getuserDataModel;
-  //   } catch (e) {
-  //     log(e.toString());
-  //     return getuserDataModel;
-  //   }
-  // }
+//-----------***  Admin get all product   ***----------------------------------------------------------------------------------------------
+  static Future<GetProductModel> getAllProduct(BuildContext context) async {
+    GetProductModel getProducts = GetProductModel();
+    try {
+      final resposnse = await ApiBaseServices.getRequestWithHeaders(
+          endPoint: "/admin/get-product");
+      log(resposnse.statusCode.toString());
+      if (resposnse.statusCode == 200) {
+        getProducts = getProductModelFromJson(jsonEncode(resposnse.data));
+        //log(getM.products!.first.price.toString());
+
+        return getProducts;
+      }
+
+      return getProducts;
+    } catch (e) {
+      if (e is DioException) {
+        final errorMessage = DioErrorHandling.handleDioError(e);
+        Future.delayed(Duration.zero, () {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(errorMessage.toString())));
+        });
+      } else {
+        log("Exception: $e");
+      }
+      return getProducts;
+    }
+  }
 
 //---------------------------------------------------------------------------------------------------------
   static Future<bool> signupUser({
@@ -84,8 +104,10 @@ class Apiservices {
     } catch (e) {
       if (e is DioException) {
         final errorMessage = DioErrorHandling.handleDioError(e);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(errorMessage.toString())));
+        Future.delayed(Duration.zero, () {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(errorMessage.toString())));
+        });
       } else {
         log("Exception: $e");
       }
@@ -95,5 +117,37 @@ class Apiservices {
     return isSign;
   }
 
-//-----------------------------------------------------------------------------------------
+//--------  get category products users  ----------------------------------------------------
+  static Future<GetProductModel> getCategoryProducts(
+      BuildContext context, String category) async {
+    GetProductModel getProducts = GetProductModel();
+    try {
+      final response = await ApiBaseServices.getRequestWithHeaders(
+          endPoint: "/api/category-products?category=$category");
+
+      log(response.statusCode.toString());
+
+      if (response.statusCode == 200) {
+        getProducts = getProductModelFromJson(jsonEncode(response.data));
+
+        // log(getProducts.products!.length.toString());
+        return getProducts;
+      } else {
+        log("Error: ${response.statusCode}");
+        return getProducts;
+      }
+    } catch (e) {
+      if (e is DioException) {
+        final errorMessage = DioErrorHandling.handleDioError(e);
+        Future.delayed(Duration.zero, () {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(errorMessage.toString())));
+        });
+      } else {
+        log("Exception: $e");
+      }
+
+      return getProducts;
+    }
+  }
 }

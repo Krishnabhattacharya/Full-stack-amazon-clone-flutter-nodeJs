@@ -1,4 +1,6 @@
 import 'package:amazon_clone/constant/global_variable.dart';
+import 'package:amazon_clone/screens/auth/auth_screen.dart';
+import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';
 import 'package:amazon_clone/widgets/account/account_button.dart';
 import 'package:amazon_clone/widgets/account/bellow_app_bar.dart';
 import 'package:amazon_clone/widgets/account/keep_shopping_for_widget.dart';
@@ -88,6 +90,13 @@ class AccountScreen extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
+            ElevatedButton(
+                onPressed: () {
+                  SharedServices.logout(context);
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, AuthScreen.routeName, (route) => false);
+                },
+                child: const Text("Log Out")),
           ],
         ),
       ),

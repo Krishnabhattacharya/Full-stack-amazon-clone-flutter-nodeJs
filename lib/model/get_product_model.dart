@@ -1,57 +1,64 @@
 // To parse this JSON data, do
 //
-//     final productModel = productModelFromJson(jsonString);
+//     final getProductModel = getProductModelFromJson(jsonString);
 
 import 'dart:convert';
 
-ProductModel productModelFromJson(String str) =>
-    ProductModel.fromJson(json.decode(str));
+GetProductModel getProductModelFromJson(String str) =>
+    GetProductModel.fromJson(json.decode(str));
 
-String productModelToJson(ProductModel data) => json.encode(data.toJson());
+String getProductModelToJson(GetProductModel data) =>
+    json.encode(data.toJson());
 
-class ProductModel {
+class GetProductModel {
   bool? success;
-  Product? product;
+  List<GProduct>? products;
 
-  ProductModel({
+  GetProductModel({
     this.success,
-    this.product,
+    this.products,
   });
 
-  factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
+  factory GetProductModel.fromJson(Map<String, dynamic> json) =>
+      GetProductModel(
         success: json["success"],
-        product:
-            json["product"] == null ? null : Product.fromJson(json["product"]),
+        products: json["products"] == null
+            ? []
+            : List<GProduct>.from(
+                json["products"]!.map((x) => GProduct.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "success": success,
-        "product": product?.toJson(),
+        "products": products == null
+            ? []
+            : List<dynamic>.from(products!.map((x) => x.toJson())),
       };
 }
 
-class Product {
+class GProduct {
+  String? id;
   String? name;
   String? description;
   List<String>? images;
   int? quantity;
   double? price;
   String? catagory;
-  String? id;
   int? v;
 
-  Product({
+  GProduct({
+    this.id,
     this.name,
     this.description,
     this.images,
     this.quantity,
     this.price,
     this.catagory,
-    this.id,
     this.v,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) => Product(
+  factory GProduct.fromJson(Map<String, dynamic> json) => GProduct(
+        id: json["_id"],
         name: json["name"],
         description: json["description"],
         images: json["images"] == null
@@ -60,11 +67,11 @@ class Product {
         quantity: json["quantity"],
         price: json["price"]?.toDouble(),
         catagory: json["catagory"],
-        id: json["_id"],
         v: json["__v"],
       );
 
   Map<String, dynamic> toJson() => {
+        "_id": id,
         "name": name,
         "description": description,
         "images":
@@ -72,7 +79,6 @@ class Product {
         "quantity": quantity,
         "price": price,
         "catagory": catagory,
-        "_id": id,
         "__v": v,
       };
 }

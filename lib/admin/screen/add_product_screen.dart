@@ -2,15 +2,19 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:amazon_clone/constant/global_variable.dart';
-import 'package:amazon_clone/screens/admin/services/cloudinary_service.dart';
+import 'package:amazon_clone/admin/screen/post_screen.dart';
+import 'package:amazon_clone/admin/services/admin_service.dart';
+import 'package:amazon_clone/services/provider/admin_add_product_screen_isprograssing_change.dart';
+
 import 'package:amazon_clone/widgets/custom_button.dart';
 import 'package:amazon_clone/widgets/custom_text_form_field.dart';
-import 'package:carousel_slider/carousel_options.dart';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class AddProductScreen extends StatefulWidget {
   static const String routeName = '/add-product';
@@ -73,30 +77,33 @@ class _AddProductScreenState extends State<AddProductScreen> {
     if (addProductKey.currentState!.validate() &&
         finalimages.isNotEmpty &&
         !isProcessing) {
-      setState(() {
-        isProcessing = true; // Start processing
-      });
+      Provider.of<IsprograssingChange>(context, listen: false)
+          .changeIsPrograssing(true);
 
       try {
         await adminService.selProduct(
           context: context,
-          name: priceC.text,
+          name: productC.text,
           desc: descriptionC.text,
           price: double.parse(priceC.text),
-          quantity: double.parse(quantityC.text),
+          quantity: int.parse(quantityC.text),
           catagory: catagoryValu,
           images: finalimages,
         );
-
-        Navigator.pop(context);
+        if (context.mounted) {
+          Navigator.pushReplacementNamed(context, PostScreen.routeName);
+        }
       } catch (e) {
         log("Error: $e");
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("An error occurred. Check logs for details.")),
-        );
+        Future.delayed(Duration.zero, () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("An error occurred")),
+          );
+        });
       } finally {
-        setState(() {
-          isProcessing = false; // Stop processing
+        Future.delayed(Duration.zero, () {
+          Provider.of<IsprograssingChange>(context, listen: false)
+              .changeIsPrograssing(false);
         });
       }
     }
@@ -104,6 +111,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   @override
   Widget build(BuildContext context) {
+    log("rebuild");
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
@@ -244,15 +252,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       ),
                     ),
                   ),
-                  isProcessing
-                      ? Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : CustomButton(
-                          text: "Sell",
-                          onTap: addProduct,
-                          color: GlobalVariables.secondaryColor,
-                        )
+                  Consumer<IsprograssingChange>(
+                      builder: (context, value, child) {
+                    return value.isPrograssing
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : CustomButton(
+                            text: "Sell",
+                            onTap: addProduct,
+                            color: GlobalVariables.secondaryColor,
+                          );
+                  })
                 ],
               ),
             )),

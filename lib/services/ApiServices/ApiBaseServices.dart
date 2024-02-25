@@ -50,9 +50,9 @@ class ApiBaseServices {
     Map<String, String> conentType = {'Content-Type': 'application/json'};
     newHeaders.addAll(conentType);
     if (SharedServices.isLoggedIn()) {
-      // LoginModel? model = SharedServices.getLoginDetails();
-      // String token = model!.token.toString();
-      // newHeaders.addAll({'Authorization': token});
+      LoginModel? model = SharedServices.getLoginDetails();
+      String token = model!.token.toString();
+      newHeaders.addAll({'Authorization': token});
     }
     log("newheaders$newHeaders");
     final response = await dio.get(

@@ -18,7 +18,7 @@ const signupController = async (req, res) => {
             });
         }
         if (existingUser) {
-            return res.status(200).send({
+            return res.status(400).send({
                 success: true,
                 message: "User Already Exist",
             });
@@ -49,7 +49,7 @@ const loginController = async (req, res) => {
             });
         }
         if (!email || !password) {
-            res.status(200).send({
+            res.status(400).send({
                 success: true,
                 message: "Invalid email or password",
             });
@@ -58,14 +58,14 @@ const loginController = async (req, res) => {
 
         if (!user) {
             console.log("User not found");
-            return res.status(200).send({
+            return res.status(404).send({
                 success: false,
                 message: "User not found",
             });
         }
         const isMatched = await bcrypt.compare(password, user.password);
         if (!isMatched) {
-            return res.status(200).send({
+            return res.status(404).send({
                 success: true,
                 message: "Invalid user",
             });

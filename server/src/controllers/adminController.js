@@ -1,6 +1,6 @@
 import Product from "../model/productModel.js";
 
-const adminController = async (req, res) => {
+const adminControllerAddProduct = async (req, res) => {
     try {
         const { name, description, images, quantity, price, catagory } = req.body;
         let product = new Product({
@@ -15,8 +15,45 @@ const adminController = async (req, res) => {
         console.error("Error in /admin/add-product:", error);
         res.status(500).send({
             success: false,
-            message: error
+            message: error.message
         })
     }
 }
-export default adminController;
+const adminControllerGetProduct = async (req, res) => {
+    try {
+        const products = await Product.find({});
+        res.status(200).send({
+            success: true,
+            products: products
+        })
+    } catch (error) {
+        res.status(500).send({
+            success: false,
+            message: `error in get admin product ${error.message}`
+        })
+    }
+}
+const adminControllerDeleteProduct = async (req, res) => {
+    try {
+        const { _id } = req.body;
+        const product = await Product.findByIdAndDelete(_id);
+        if (!product) {
+
+            return res.status(404).send({
+                success: false,
+                message: "Product not found",
+            });
+        }
+        res.status(200).send({
+            success: true,
+            product: product,
+        });
+    } catch (error) {
+        res.status(500).send({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+export { adminControllerAddProduct, adminControllerGetProduct, adminControllerDeleteProduct };

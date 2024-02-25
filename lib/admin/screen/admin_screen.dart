@@ -1,5 +1,7 @@
 import 'package:amazon_clone/constant/global_variable.dart';
-import 'package:amazon_clone/screens/admin/screen/post_screen.dart';
+import 'package:amazon_clone/admin/screen/post_screen.dart';
+import 'package:amazon_clone/screens/auth/auth_screen.dart';
+import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';
 import 'package:amazon_clone/services/provider/bottom_bar_index_change_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,7 +19,7 @@ class _AdminScreenState extends State<AdminScreen> {
   double bottomBarWidth = 42;
   double bottomBarBorderWidth = 5;
 
-  List<Widget> pages = [PostScreen(), Text("1"), Text("1")];
+  List<Widget> pages = [PostScreen(), LogOut(), Text("1")];
   @override
   Widget build(BuildContext context) {
     return Consumer<BottobarIndexChange>(builder: (context, value, child) {
@@ -128,5 +130,27 @@ class _AdminScreenState extends State<AdminScreen> {
         ),
       );
     });
+  }
+}
+
+class LogOut extends StatefulWidget {
+  const LogOut({super.key});
+
+  @override
+  State<LogOut> createState() => _LogOutState();
+}
+
+class _LogOutState extends State<LogOut> {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ElevatedButton(
+          onPressed: () {
+            SharedServices.logout(context);
+            Navigator.pushNamedAndRemoveUntil(
+                context, AuthScreen.routeName, (route) => false);
+          },
+          child: const Text("Log Out")),
+    );
   }
 }

@@ -47,7 +47,10 @@ class _OrdersState extends State<Orders> {
               scrollDirection: Axis.horizontal,
               itemCount: 2,
               itemBuilder: (context, index) {
-                return const SingleProduct();
+                return const SingleProduct(
+                  images:
+                      'https://images-eu.ssl-images-amazon.com/images/G/31/img21/Wireless/WLA/TS/D37847648_Accessories_savingdays_Jan22_Cat_PC_1500.jpg',
+                );
               }),
         )
       ],

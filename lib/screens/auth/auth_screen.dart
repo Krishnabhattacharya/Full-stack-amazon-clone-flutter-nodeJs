@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:amazon_clone/constant/global_variable.dart';
-import 'package:amazon_clone/screens/admin/screen/admin_screen.dart';
+import 'package:amazon_clone/admin/screen/admin_screen.dart';
 
 import 'package:amazon_clone/services/ApiServices/ApiServices.dart';
 import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';

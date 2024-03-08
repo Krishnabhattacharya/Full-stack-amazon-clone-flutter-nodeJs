@@ -1,4 +1,5 @@
 import 'package:amazon_clone/constant/global_variable.dart';
+import 'package:amazon_clone/screens/home/search_screen.dart';
 import 'package:amazon_clone/widgets/home/address_box.dart';
 import 'package:amazon_clone/widgets/home/carousel_slider.dart';
 import 'package:amazon_clone/widgets/home/deal_of_the_day.dart';
@@ -25,6 +26,10 @@ class HomePage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(7),
                 elevation: 1,
                 child: TextFormField(
+                  onFieldSubmitted: (value) {
+                    Navigator.pushNamed(context, SearchScreen.routeName,
+                        arguments: value);
+                  },
                   decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,

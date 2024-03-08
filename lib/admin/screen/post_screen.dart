@@ -1,7 +1,7 @@
 import 'dart:developer';
 
-import 'package:amazon_clone/model/get_product_model.dart';
 import 'package:amazon_clone/admin/screen/add_product_screen.dart';
+import 'package:amazon_clone/model/product_model.dart';
 
 import 'package:amazon_clone/services/ApiServices/ApiServices.dart';
 import 'package:amazon_clone/services/provider/admin_add_product_screen_isprograssing_change.dart';
@@ -20,7 +20,7 @@ class PostScreen extends StatefulWidget {
 
 class _PostScreenState extends State<PostScreen> {
   bool isLoading = false;
-  List<GProduct>? productList = [];
+  List<Product>? productList = [];
   @override
   void initState() {
     super.initState();

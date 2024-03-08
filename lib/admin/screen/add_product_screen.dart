@@ -6,8 +6,8 @@ import 'package:amazon_clone/admin/screen/post_screen.dart';
 import 'package:amazon_clone/admin/services/admin_service.dart';
 import 'package:amazon_clone/services/provider/admin_add_product_screen_isprograssing_change.dart';
 
-import 'package:amazon_clone/widgets/custom_button.dart';
-import 'package:amazon_clone/widgets/custom_text_form_field.dart';
+import 'package:amazon_clone/widgets/reuseable_widgets.dart/custom_button.dart';
+import 'package:amazon_clone/widgets/reuseable_widgets.dart/custom_text_form_field.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -85,7 +85,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           context: context,
           name: productC.text,
           desc: descriptionC.text,
-          price: double.parse(priceC.text),
+          price: int.parse(priceC.text),
           quantity: int.parse(quantityC.text),
           catagory: catagoryValu,
           images: finalimages,

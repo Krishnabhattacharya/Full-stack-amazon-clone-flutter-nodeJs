@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:amazon_clone/constant/dio_error.dart';
-import 'package:amazon_clone/model/add_product_model.dart';
+import 'package:amazon_clone/model/product_model.dart';
 
 import 'package:amazon_clone/services/ApiServices/ApiBaseServices.dart';
 import 'package:cloudinary_public/cloudinary_public.dart';
@@ -15,7 +15,7 @@ class AdminService {
     required BuildContext context,
     required String name,
     required String desc,
-    required double price,
+    required int price,
     required int quantity,
     required String catagory,
     required List<XFile> images,

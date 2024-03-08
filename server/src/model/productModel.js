@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { type } from 'os';
+import RatingSchema from './ratingSchema.js';
 
 const productSchema = mongoose.Schema({
     name: {
@@ -27,7 +27,9 @@ const productSchema = mongoose.Schema({
     catagory: {
         type: String,
         required: true,
-    }
+    },
+    rating: [RatingSchema]
+
 });
 const Product = mongoose.model("Product", productSchema);
 export default Product;

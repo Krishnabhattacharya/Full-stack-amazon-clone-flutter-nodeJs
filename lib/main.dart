@@ -8,7 +8,7 @@ import 'package:amazon_clone/services/provider/admin_add_product_screen_isprogra
 import 'package:amazon_clone/services/provider/auth_provider.dart';
 import 'package:amazon_clone/services/provider/radio_button_state_change.dart';
 import 'package:amazon_clone/services/provider/bottom_bar_index_change_provider.dart';
-import 'package:amazon_clone/widgets/bottom_bar.dart';
+import 'package:amazon_clone/widgets/reuseable_widgets.dart/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';

@@ -2,8 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:amazon_clone/constant/dio_error.dart';
-
-import 'package:amazon_clone/model/get_product_model.dart';
+import 'package:amazon_clone/model/product_model.dart';
 import 'package:amazon_clone/model/Auth_models/login_model.dart';
 import 'package:amazon_clone/services/ApiServices/ApiBaseServices.dart';
 import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';
@@ -48,14 +47,14 @@ class Apiservices {
   }
 
 //-----------***  Admin get all product   ***----------------------------------------------------------------------------------------------
-  static Future<GetProductModel> getAllProduct(BuildContext context) async {
-    GetProductModel getProducts = GetProductModel();
+  static Future<ProductModel> getAllProduct(BuildContext context) async {
+    ProductModel getProducts = ProductModel();
     try {
       final resposnse = await ApiBaseServices.getRequestWithHeaders(
           endPoint: "/admin/get-product");
       log(resposnse.statusCode.toString());
       if (resposnse.statusCode == 200) {
-        getProducts = getProductModelFromJson(jsonEncode(resposnse.data));
+        getProducts = productModelFromJson(jsonEncode(resposnse.data));
         //log(getM.products!.first.price.toString());
 
         return getProducts;
@@ -118,9 +117,9 @@ class Apiservices {
   }
 
 //--------  get category products users  ----------------------------------------------------
-  static Future<GetProductModel> getCategoryProducts(
+  static Future<List<Product>> getCategoryProducts(
       BuildContext context, String category) async {
-    GetProductModel getProducts = GetProductModel();
+    List<Product> products = [];
     try {
       final response = await ApiBaseServices.getRequestWithHeaders(
           endPoint: "/api/category-products?category=$category");
@@ -128,13 +127,14 @@ class Apiservices {
       log(response.statusCode.toString());
 
       if (response.statusCode == 200) {
-        getProducts = getProductModelFromJson(jsonEncode(response.data));
-
-        // log(getProducts.products!.length.toString());
-        return getProducts;
+        ProductModel getProducts =
+            productModelFromJson(jsonEncode(response.data));
+        products = getProducts.products ?? [];
+        // log(products.length.toString());
+        return products;
       } else {
         log("Error: ${response.statusCode}");
-        return getProducts;
+        return products;
       }
     } catch (e) {
       if (e is DioException) {
@@ -147,7 +147,43 @@ class Apiservices {
         log("Exception: $e");
       }
 
-      return getProducts;
+      return products;
+    }
+  }
+
+  //------------------------------------------------------------------------------
+  //search-products
+  static Future<List<Product>> getSearchProducts(
+      BuildContext context, String category) async {
+    List<Product> products = [];
+    try {
+      final response = await ApiBaseServices.getRequestWithHeaders(
+          endPoint: "/api/search-products/$category");
+
+      log(response.statusCode.toString());
+
+      if (response.statusCode == 200) {
+        ProductModel getProducts =
+            productModelFromJson(jsonEncode(response.data));
+        products = getProducts.products ?? [];
+        // log(products.length.toString());
+        return products;
+      } else {
+        log("Error: ${response.statusCode}");
+        return products;
+      }
+    } catch (e) {
+      if (e is DioException) {
+        final errorMessage = DioErrorHandling.handleDioError(e);
+        Future.delayed(Duration.zero, () {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(errorMessage.toString())));
+        });
+      } else {
+        log("Exception: $e");
+      }
+
+      return products;
     }
   }
 }

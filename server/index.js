@@ -6,6 +6,7 @@ import db from './src/db/mongoose.js';
 import morgan from 'morgan';
 import adminRoute from './src/routes/adminRoute.js';
 import productRoute from './src/routes/getProducts.js';
+import searchRoute from './src/routes/searchRoute.js';
 
 
 dotenv.config();
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use("/api/auth", authRoute);
 app.use(adminRoute);
 app.use(productRoute);
+app.use(searchRoute);
 app.use(morgan("dev"));
 db();
 

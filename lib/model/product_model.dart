@@ -43,7 +43,7 @@ class Product {
   int? price;
   String? catagory;
   int? v;
-  List<dynamic>? rating;
+  List<Rating>? rating;
 
   Product({
     this.id,
@@ -70,7 +70,7 @@ class Product {
         v: json["__v"],
         rating: json["rating"] == null
             ? []
-            : List<dynamic>.from(json["rating"]!.map((x) => x)),
+            : List<Rating>.from(json["rating"]!.map((x) => Rating.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -83,7 +83,32 @@ class Product {
         "price": price,
         "catagory": catagory,
         "__v": v,
-        "rating":
-            rating == null ? [] : List<dynamic>.from(rating!.map((x) => x)),
+        "rating": rating == null
+            ? []
+            : List<dynamic>.from(rating!.map((x) => x.toJson())),
+      };
+}
+
+class Rating {
+  String? userId;
+  double? rating;
+  String? id;
+
+  Rating({
+    this.userId,
+    this.rating,
+    this.id,
+  });
+
+  factory Rating.fromJson(Map<String, dynamic> json) => Rating(
+        userId: json["userId"],
+        rating: json["rating"]?.toDouble(),
+        id: json["_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "userId": userId,
+        "rating": rating,
+        "_id": id,
       };
 }

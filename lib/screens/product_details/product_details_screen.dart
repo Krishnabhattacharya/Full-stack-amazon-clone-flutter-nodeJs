@@ -3,14 +3,15 @@ import 'package:amazon_clone/constant/global_variable.dart';
 import 'package:amazon_clone/model/product_model.dart';
 import 'package:amazon_clone/screens/home/search_screen.dart';
 import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';
-import 'package:amazon_clone/widgets/home/carousel_slider.dart';
-import 'package:amazon_clone/widgets/reuseable_widgets.dart/custom_button.dart';
+import 'package:amazon_clone/services/provider/api_services_provider.dart';
+
 import 'package:amazon_clone/widgets/reuseable_widgets.dart/custom_page_indicator_slider.dart';
 import 'package:amazon_clone/widgets/reuseable_widgets.dart/rating_star_widget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class ProductdetailsScreen extends StatefulWidget {
   static const String routeName = '/product-details-screen';
@@ -22,6 +23,14 @@ class ProductdetailsScreen extends StatefulWidget {
 }
 
 class _ProductdetailsScreenState extends State<ProductdetailsScreen> {
+  double _rating = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _rating = Provider.of<ApiProviderServices>(context, listen: false).myrating;
+  }
+
   int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -100,7 +109,11 @@ class _ProductdetailsScreenState extends State<ProductdetailsScreen> {
                     "Visite the ${widget.product.name} store",
                     style: const TextStyle(color: Colors.teal),
                   ),
-                  const StartRatting(rating: 3),
+                  Consumer<ApiProviderServices>(
+                    builder: (context, value, child) {
+                      return StartRatting(rating: value.avgRating);
+                    },
+                  ),
                 ],
               ),
             ),
@@ -282,18 +295,29 @@ class _ProductdetailsScreenState extends State<ProductdetailsScreen> {
                           fontSize: 20),
                     ),
                   ),
-                  RatingBar.builder(
-                      initialRating: 0,
-                      minRating: 1,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 4),
-                      itemBuilder: (context, index) => const Icon(
-                            Icons.star,
-                            color: GlobalVariables.secondaryColor,
-                          ),
-                      onRatingUpdate: (r) {}),
+                  Consumer<ApiProviderServices>(
+                    builder: (context, value, child) {
+                      return RatingBar.builder(
+                          initialRating: _rating,
+                          minRating: 1,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          itemPadding:
+                              const EdgeInsets.symmetric(horizontal: 4),
+                          itemBuilder: (context, index) => const Icon(
+                                Icons.star,
+                                color: GlobalVariables.secondaryColor,
+                              ),
+                          onRatingUpdate: (r) {
+                            setState(() {
+                              _rating = r;
+                            });
+                            value.rateProductProvider(
+                                context, r, widget.product);
+                          });
+                    },
+                  ),
                   const SizedBox(
                     height: 20,
                   )

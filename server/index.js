@@ -7,6 +7,7 @@ import morgan from 'morgan';
 import adminRoute from './src/routes/adminRoute.js';
 import productRoute from './src/routes/getProducts.js';
 import searchRoute from './src/routes/searchRoute.js';
+import RatingtRoute from './src/routes/ratingProduct.js';
 
 
 dotenv.config();
@@ -18,6 +19,7 @@ app.use("/api/auth", authRoute);
 app.use(adminRoute);
 app.use(productRoute);
 app.use(searchRoute);
+app.use(RatingtRoute);
 app.use(morgan("dev"));
 db();
 

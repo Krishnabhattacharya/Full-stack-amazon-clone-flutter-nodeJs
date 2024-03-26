@@ -186,4 +186,31 @@ class Apiservices {
       return products;
     }
   }
+
+  //----------------------------------------------------------------------------------
+  //rating-product
+  static Future<void> rateproduct({
+    required BuildContext context,
+    required Product product,
+    required double rating,
+  }) async {
+    try {
+      Response res = await ApiBaseServices.postRequestWithHeader(
+          endPoint: '/api/rating-products',
+          body: {
+            'id': product.id,
+            'rating': rating,
+          });
+    } catch (e) {
+      if (e is DioException) {
+        final errorMessage = DioErrorHandling.handleDioError(e);
+        Future.delayed(Duration.zero, () {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(errorMessage.toString())));
+        });
+      } else {
+        log("Exception: $e");
+      }
+    }
+  }
 }

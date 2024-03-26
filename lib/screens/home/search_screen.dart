@@ -1,14 +1,12 @@
-import 'dart:developer';
-
 import 'package:amazon_clone/constant/global_variable.dart';
 
 import 'package:amazon_clone/screens/product_details/product_details_screen.dart';
-import 'package:amazon_clone/services/ApiServices/ApiServices.dart';
+
+import 'package:amazon_clone/services/provider/api_services_provider.dart';
 import 'package:amazon_clone/widgets/home/address_box.dart';
 import 'package:amazon_clone/widgets/home/search_product.dart';
 import 'package:flutter/material.dart';
-
-import '../../model/product_model.dart';
+import 'package:provider/provider.dart';
 
 class SearchScreen extends StatefulWidget {
   final String searchQuery;
@@ -20,17 +18,11 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  List<Product> searchProducts = [];
   @override
   void initState() {
     super.initState();
-    getdata(widget.searchQuery);
-    log(searchProducts.length.toString());
-  }
-
-  getdata(String category) async {
-    searchProducts = await Apiservices.getSearchProducts(context, category);
-    setState(() {});
+    Provider.of<ApiProviderServices>(context, listen: false)
+        .getSearchProductsProvider(context, widget.searchQuery);
   }
 
   @override
@@ -98,31 +90,35 @@ class _SearchScreenState extends State<SearchScreen> {
             )),
           ),
         ),
-        body: searchProducts.isEmpty
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : Column(
-                children: [
-                  const AddressBoxWidget(),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Expanded(
-                      child: ListView.builder(
-                          itemCount: searchProducts.length,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, ProductdetailsScreen.routeName,
-                                    arguments: searchProducts[index]);
-                              },
-                              child: SearchProductWidget(
-                                  products: searchProducts[index]),
-                            );
-                          }))
-                ],
-              ));
+        body: Consumer<ApiProviderServices>(
+          builder: (context, value, child) {
+            return value.searchProducts.isEmpty
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Column(
+                    children: [
+                      const AddressBoxWidget(),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Expanded(
+                          child: ListView.builder(
+                              itemCount: value.searchProducts.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, ProductdetailsScreen.routeName,
+                                        arguments: value.searchProducts[index]);
+                                  },
+                                  child: SearchProductWidget(
+                                      products: value.searchProducts[index]),
+                                );
+                              }))
+                    ],
+                  );
+          },
+        ));
   }
 }

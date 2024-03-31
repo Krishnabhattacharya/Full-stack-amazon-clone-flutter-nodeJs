@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:amazon_clone/model/Auth_models/login_model.dart';
+import 'package:amazon_clone/model/Auth_models/user_model.dart';
 import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';
 import 'package:dio/dio.dart';
 
@@ -50,7 +50,7 @@ class ApiBaseServices {
     Map<String, String> conentType = {'Content-Type': 'application/json'};
     newHeaders.addAll(conentType);
     if (SharedServices.isLoggedIn()) {
-      LoginModel? model = SharedServices.getLoginDetails();
+      UserModel? model = SharedServices.getLoginDetails();
       String token = model!.token.toString();
       newHeaders.addAll({'Authorization': token});
     }
@@ -91,7 +91,7 @@ class ApiBaseServices {
     Map<String, String> conentType = {'Content-Type': 'application/json'};
     newHeaders.addAll(conentType);
     if (SharedServices.isLoggedIn()) {
-      LoginModel? model = SharedServices.getLoginDetails();
+      UserModel? model = SharedServices.getLoginDetails();
       String token = model!.token.toString();
       newHeaders.addAll({'Authorization': token});
     }

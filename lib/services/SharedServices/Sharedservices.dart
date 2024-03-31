@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:amazon_clone/model/Auth_models/login_model.dart';
+import 'package:amazon_clone/model/Auth_models/user_model.dart';
 import 'package:amazon_clone/services/SharedServices/Preferences.dart';
 import 'package:flutter/material.dart';
 
@@ -18,17 +18,35 @@ import 'package:flutter/material.dart';
 
 class SharedServices {
 //set all the login details-----------------------------------
-  static Future<void> setLoginDetails(LoginModel? usermodel) async {
+  static Future<void> setLoginDetails(UserModel? usermodel) async {
     if (usermodel != null) {
       preferences!.setString("login_details", jsonEncode(usermodel.toJson()));
     }
   }
 
+  //update user-----------------------------------------------
+  static Future<void> updateCart(List<Cart> updatedCart) async {
+    UserModel? user = getLoginDetails();
+    if (user != null) {
+      user.user!.cart = updatedCart;
+      await setLoginDetails(user);
+    }
+  }
+
+//update address of a user
+  static Future<void> updateAddress(String address) async {
+    UserModel? user = getLoginDetails();
+    if (user != null) {
+      user.user!.address = address;
+      await setLoginDetails(user);
+    }
+  }
+
 // get the login details------------------------------------
-  static LoginModel? getLoginDetails() {
+  static UserModel? getLoginDetails() {
     String? jsonDetails = preferences!.getString("login_details");
     if (jsonDetails != null) {
-      return LoginModel.fromJson(jsonDecode(jsonDetails));
+      return UserModel.fromJson(jsonDecode(jsonDetails));
     }
     return null;
   }

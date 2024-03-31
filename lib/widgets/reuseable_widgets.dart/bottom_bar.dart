@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:amazon_clone/constant/global_variable.dart';
 import 'package:amazon_clone/screens/account/account_screen.dart';
+import 'package:amazon_clone/screens/home/cart_screen.dart';
 import 'package:amazon_clone/screens/home/home_screen.dart';
+import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';
 import 'package:amazon_clone/services/provider/bottom_bar_index_change_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -19,9 +21,9 @@ class BottomBar extends StatefulWidget {
 
 class _BottomBarState extends State<BottomBar> {
   List screens = [
-    HomePage(),
-    AccountScreen(),
-    Container(),
+    const HomePage(),
+    const AccountScreen(),
+    const CartScreen(),
     Container(),
   ];
   double bottomBarWidth = 42;
@@ -98,14 +100,15 @@ class _BottomBarState extends State<BottomBar> {
                       ),
                     ),
                   ),
-                  child: const badges.Badge(
+                  child: badges.Badge(
                     //   elevation: 0,
-                    badgeContent: Text("3"),
-                    badgeStyle: badges.BadgeStyle(
+                    badgeContent: Text(
+                        "${SharedServices.getLoginDetails()!.user!.cart!.length}"),
+                    badgeStyle: const badges.BadgeStyle(
                       badgeColor: Colors.white,
                     ),
 
-                    child: Icon(
+                    child: const Icon(
                       Icons.shopping_cart_outlined,
                     ),
                   ),

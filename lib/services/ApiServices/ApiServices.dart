@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:amazon_clone/constant/dio_error.dart';
 import 'package:amazon_clone/model/product_model.dart';
-import 'package:amazon_clone/model/Auth_models/login_model.dart';
+import 'package:amazon_clone/model/Auth_models/user_model.dart';
 import 'package:amazon_clone/services/ApiServices/ApiBaseServices.dart';
 import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';
 
@@ -17,7 +17,7 @@ class Apiservices {
     required BuildContext context,
   }) async {
     bool res = false;
-    LoginModel node = LoginModel();
+    UserModel node = UserModel();
     try {
       final response = await ApiBaseServices.loginUser(
         Exturl: "/api/auth/user/signin",
@@ -27,7 +27,7 @@ class Apiservices {
       log("heloo");
       log(jsonEncode(response.data));
       if (response.statusCode == 201 || response.statusCode == 200) {
-        node = loginModelFromJson(jsonEncode(response.data));
+        node = userModelFromJson(jsonEncode(response.data));
         SharedServices.setLoginDetails(node);
         res = true;
       }
@@ -211,6 +211,133 @@ class Apiservices {
       } else {
         log("Exception: $e");
       }
+    }
+  }
+
+  //--------------------------------------------------
+  //get deal of the day
+  static Future<Product> dealOfTheDay({required BuildContext context}) async {
+    Product product = Product();
+    try {
+      final response = await ApiBaseServices.getRequestWithHeaders(
+          endPoint: "/api/deal-of-day-products");
+
+      log(response.statusCode.toString());
+
+      if (response.statusCode == 200) {
+        //  log(response.data.toString());
+        final res = productModelFromJson(jsonEncode(response.data));
+        product = res.products!.first;
+        return product;
+      } else {
+        log("Error: ${response.statusCode}");
+        return product;
+      }
+    } catch (e) {
+      if (e is DioException) {
+        final errorMessage = DioErrorHandling.handleDioError(e);
+        Future.delayed(Duration.zero, () {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(errorMessage.toString())));
+        });
+      } else {
+        log("Exception: $e");
+      }
+
+      return product;
+    }
+  }
+
+  //-----------------------------------------------------------------------------------
+  //add-to-cart
+  static Future<UserModel> addToCart(
+      {required BuildContext context,
+      required UserModelProduct product}) async {
+    UserModel userModel = UserModel();
+    try {
+      Response res = await ApiBaseServices.postRequestWithHeader(
+          endPoint: '/api/add-to-cart',
+          body: {
+            "id": product.id,
+          });
+
+      userModel = userModelFromJson(jsonEncode(res.data));
+
+      return userModel;
+    } catch (e) {
+      if (e is DioException) {
+        final errorMessage = DioErrorHandling.handleDioError(e);
+        Future.delayed(Duration.zero, () {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(errorMessage.toString())));
+        });
+      } else {
+        log("Exception: $e");
+      }
+    }
+    return userModel;
+  }
+
+  //--------------------------------------------------------
+  //delete from cart
+  static Future<UserModel> deleteFromCart(
+      {required BuildContext context,
+      required UserModelProduct product}) async {
+    UserModel userModel = UserModel();
+    try {
+      Response res = await ApiBaseServices.postRequestWithHeader(
+          endPoint: '/api/delete-from-cart',
+          body: {
+            "id": product.id,
+          });
+
+      userModel = userModelFromJson(jsonEncode(res.data));
+
+      return userModel;
+    } catch (e) {
+      if (e is DioException) {
+        final errorMessage = DioErrorHandling.handleDioError(e);
+        Future.delayed(Duration.zero, () {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(errorMessage.toString())));
+        });
+      } else {
+        log("Exception: $e");
+      }
+    }
+    return userModel;
+  }
+
+  //--------------------------------------------------------
+  //add-address
+  static Future<void> addAddress({
+    required String address,
+    required BuildContext context,
+  }) async {
+    try {
+      final response = await ApiBaseServices.postRequestWithHeader(
+          endPoint: "/api/add-address",
+          body: {
+            'address': address,
+          });
+      // log("heloo");
+      log(jsonEncode(response.data));
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        //  userModelFromJson(jsonEncode(response.data));
+        SharedServices.updateAddress(address);
+      }
+      // return res;
+    } catch (e) {
+      if (e is DioException) {
+        final errorMessage = DioErrorHandling.handleDioError(e);
+        Future.delayed(Duration.zero, () {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(errorMessage.toString())));
+        });
+      } else {
+        log("Exception: $e");
+      }
+      // return false;
     }
   }
 }

@@ -2,6 +2,8 @@ import 'package:amazon_clone/admin/screen/add_product_screen.dart';
 import 'package:amazon_clone/admin/screen/post_screen.dart';
 
 import 'package:amazon_clone/model/product_model.dart';
+import 'package:amazon_clone/screens/address/address_screen.dart';
+
 import 'package:amazon_clone/screens/auth/auth_screen.dart';
 import 'package:amazon_clone/screens/home/category_deals_screen.dart';
 import 'package:amazon_clone/screens/home/home_screen.dart';
@@ -48,6 +50,9 @@ Route<dynamic> geneRateRoute(RouteSettings routeSettings) {
           builder: (_) => ProductdetailsScreen(
                 product: product,
               ));
+    case AddressScreen.routeName:
+      return MaterialPageRoute(
+          settings: routeSettings, builder: (_) => const AddressScreen());
     default:
       return MaterialPageRoute(
         settings: routeSettings,

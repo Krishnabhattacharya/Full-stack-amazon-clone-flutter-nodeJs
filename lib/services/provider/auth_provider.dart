@@ -1,10 +1,10 @@
-import 'package:amazon_clone/model/Auth_models/login_model.dart';
+import 'package:amazon_clone/model/Auth_models/user_model.dart';
 import 'package:flutter/material.dart';
 
 class AuthProvider extends ChangeNotifier {
-  LoginModel? _loginModel;
-  LoginModel? get loginmodel => _loginModel;
-  void setLoginDetails(LoginModel loginmodel) {
+  UserModel? _loginModel;
+  UserModel? get loginmodel => _loginModel;
+  void setLoginDetails(UserModel loginmodel) {
     _loginModel = loginmodel;
     notifyListeners();
   }

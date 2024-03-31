@@ -247,19 +247,13 @@ class _AuthScreenState extends State<AuthScreen> {
                                               password: pass.text)
                                           .then((value) {
                                         if (value) {
-                                          // Navigator.pushNamedAndRemoveUntil(
-                                          //     context,
-                                          //     BottomBar.routeName,
-                                          //     (route) => false);
                                           if (value) {
-                                            // Check the user type from AuthProvider
                                             final type = SharedServices
                                                     .getLoginDetails()!
                                                 .user!
                                                 .type!
                                                 .toLowerCase();
                                             if (type == "admin") {
-                                              // User is logged in and is an admin, navigate to AdminScreen
                                               Navigator.pushReplacement(
                                                 context,
                                                 MaterialPageRoute(
@@ -278,7 +272,10 @@ class _AuthScreenState extends State<AuthScreen> {
                                           }
                                         }
                                       });
-                                    })
+                                    }),
+                                const SizedBox(
+                                  height: 9,
+                                ),
                               ],
                             )),
                       ),

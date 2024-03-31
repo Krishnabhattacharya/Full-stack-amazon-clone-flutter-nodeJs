@@ -1,8 +1,13 @@
+import 'dart:developer';
+
 import 'package:amazon_clone/constant/global_variable.dart';
+import 'package:amazon_clone/model/Auth_models/user_model.dart';
 
 import 'package:amazon_clone/model/product_model.dart';
 import 'package:amazon_clone/screens/home/search_screen.dart';
+import 'package:amazon_clone/services/ApiServices/ApiServices.dart';
 import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';
+import 'package:amazon_clone/services/provider/admin_add_product_screen_isprograssing_change.dart';
 import 'package:amazon_clone/services/provider/api_services_provider.dart';
 
 import 'package:amazon_clone/widgets/reuseable_widgets.dart/custom_page_indicator_slider.dart';
@@ -23,12 +28,24 @@ class ProductdetailsScreen extends StatefulWidget {
 }
 
 class _ProductdetailsScreenState extends State<ProductdetailsScreen> {
-  double _rating = 0;
-
+  double avgRating = 0;
+  double myRating = 0;
+  bool isProgressing = false;
   @override
   void initState() {
     super.initState();
-    _rating = Provider.of<ApiProviderServices>(context, listen: false).myrating;
+    double totalRating = 0;
+    for (int i = 0; i < widget.product.rating!.length; i++) {
+      totalRating += widget.product.rating![i].rating!;
+      if (widget.product.rating![i].userId ==
+          SharedServices.getLoginDetails()!.user!.id) {
+        myRating = widget.product.rating![i].rating!;
+      }
+    }
+
+    if (totalRating != 0) {
+      avgRating = totalRating / widget.product.rating!.length;
+    }
   }
 
   int _currentIndex = 0;
@@ -109,11 +126,7 @@ class _ProductdetailsScreenState extends State<ProductdetailsScreen> {
                     "Visite the ${widget.product.name} store",
                     style: const TextStyle(color: Colors.teal),
                   ),
-                  Consumer<ApiProviderServices>(
-                    builder: (context, value, child) {
-                      return StartRatting(rating: value.avgRating);
-                    },
-                  ),
+                  StartRatting(rating: avgRating),
                 ],
               ),
             ),
@@ -251,7 +264,37 @@ class _ProductdetailsScreenState extends State<ProductdetailsScreen> {
                   Padding(
                       padding: const EdgeInsets.only(right: 10.0, top: 10),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          if (!isProgressing) {
+                            Provider.of<IsprograssingChange>(context,
+                                    listen: false)
+                                .changeIsPrograssing(true);
+                          }
+
+                          UserModelProduct userModelProduct = UserModelProduct(
+                            id: widget.product.id,
+                            name: widget.product.name,
+                            price: widget.product.price,
+                            description: widget.product.description,
+                            images: widget.product.images,
+                            quantity: widget.product.quantity,
+                            catagory: widget.product.catagory,
+                          );
+
+                          UserModel user = await Apiservices.addToCart(
+                              context: context, product: userModelProduct);
+                          SharedServices.updateCart(user.user!.cart!);
+
+                          Future.delayed(Duration.zero, () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text("Product added successfully")));
+                          });
+                          Provider.of<IsprograssingChange>(context,
+                                  listen: false)
+                              .changeIsPrograssing(false);
+                        },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),
@@ -260,12 +303,16 @@ class _ProductdetailsScreenState extends State<ProductdetailsScreen> {
                           backgroundColor:
                               const Color.fromARGB(255, 255, 214, 11),
                         ),
-                        child: const Text(
-                          "Add to Cart",
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                        ),
+                        child: isProgressing
+                            ? const Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : const Text(
+                                "Add to Cart",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
                       )),
                   Padding(
                       padding: const EdgeInsets.only(right: 10.0, top: 10),
@@ -295,27 +342,20 @@ class _ProductdetailsScreenState extends State<ProductdetailsScreen> {
                           fontSize: 20),
                     ),
                   ),
-                  Consumer<ApiProviderServices>(
-                    builder: (context, value, child) {
-                      return RatingBar.builder(
-                          initialRating: _rating,
-                          minRating: 1,
-                          direction: Axis.horizontal,
-                          allowHalfRating: true,
-                          itemCount: 5,
-                          itemPadding:
-                              const EdgeInsets.symmetric(horizontal: 4),
-                          itemBuilder: (context, index) => const Icon(
-                                Icons.star,
-                                color: GlobalVariables.secondaryColor,
-                              ),
-                          onRatingUpdate: (r) {
-                            setState(() {
-                              _rating = r;
-                            });
-                            value.rateProductProvider(
-                                context, r, widget.product);
-                          });
+                  RatingBar.builder(
+                    initialRating: myRating,
+                    minRating: 1,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 4),
+                    itemBuilder: (context, index) => const Icon(
+                      Icons.star,
+                      color: GlobalVariables.secondaryColor,
+                    ),
+                    onRatingUpdate: (r) {
+                      Apiservices.rateproduct(
+                          context: context, product: widget.product, rating: r);
                     },
                   ),
                   const SizedBox(

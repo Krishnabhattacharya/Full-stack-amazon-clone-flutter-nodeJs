@@ -1,7 +1,9 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
+import { type } from 'os';
 import validator from 'validator';
+import { productSchema } from './productModel.js';
 const userSchema = mongoose.Schema({
     name: {
         type: String,
@@ -34,7 +36,16 @@ const userSchema = mongoose.Schema({
             required: true,
         }
     }
-    ]
+    ],
+    cart: [
+        {
+            product: productSchema,
+            cartQuantity: {
+                type: Number,
+                required: true,
+            },
+        },
+    ],
 }, { timestamps: true });
 
 

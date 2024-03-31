@@ -10,16 +10,18 @@ import searchRoute from './src/routes/searchRoute.js';
 import RatingtRoute from './src/routes/ratingProduct.js';
 
 
+
 dotenv.config();
 const app = express();
 
 
 app.use(express.json());
-app.use("/api/auth", authRoute);
+app.use(authRoute);
 app.use(adminRoute);
 app.use(productRoute);
 app.use(searchRoute);
 app.use(RatingtRoute);
+
 app.use(morgan("dev"));
 db();
 

@@ -1,4 +1,4 @@
-import Product from "../model/productModel.js"
+import { Product } from "../model/productModel.js"
 const searchController = async (req, res) => {
     try {
         const productName = req.params.productName;

@@ -1,4 +1,4 @@
-import Product from "../model/productModel.js";
+import { Product } from "../model/productModel.js";
 
 const adminControllerAddProduct = async (req, res) => {
     try {

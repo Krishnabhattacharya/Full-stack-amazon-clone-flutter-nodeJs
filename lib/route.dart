@@ -8,6 +8,7 @@ import 'package:amazon_clone/screens/auth/auth_screen.dart';
 import 'package:amazon_clone/screens/home/category_deals_screen.dart';
 import 'package:amazon_clone/screens/home/home_screen.dart';
 import 'package:amazon_clone/screens/home/search_screen.dart';
+import 'package:amazon_clone/screens/payment/payment_screen.dart';
 import 'package:amazon_clone/screens/product_details/product_details_screen.dart';
 import 'package:amazon_clone/widgets/reuseable_widgets.dart/bottom_bar.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,10 @@ Route<dynamic> geneRateRoute(RouteSettings routeSettings) {
               ));
     case AddressScreen.routeName:
       return MaterialPageRoute(
-          settings: routeSettings, builder: (_) => const AddressScreen());
+          settings: routeSettings, builder: (_) => AddressScreen());
+    case PaymentScreen.routeName:
+      return MaterialPageRoute(
+          settings: routeSettings, builder: (_) => PaymentScreen());
     default:
       return MaterialPageRoute(
         settings: routeSettings,

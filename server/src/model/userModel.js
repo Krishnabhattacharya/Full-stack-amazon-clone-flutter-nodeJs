@@ -1,7 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
-import { type } from 'os';
 import validator from 'validator';
 import { productSchema } from './productModel.js';
 const userSchema = mongoose.Schema({

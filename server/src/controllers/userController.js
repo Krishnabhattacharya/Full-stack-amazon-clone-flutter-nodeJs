@@ -158,5 +158,21 @@ const addAddress = async (req, res) => {
             message: error.message
         });
     }
+
 }
-export { signupController, loginController, addToCart, deleteFromCartController, addAddress };
+const ordersControllers = async (req, res) => {
+    try {
+        const { cart, price, address } = req.body;
+        // let user = await User.findById(req.user._id);
+        // user.address = address;
+        // await user.save();
+        res.status(200).send({ success: true, user: user });
+    } catch (error) {
+        return res.status(500).send({
+            success: false,
+            message: error.message
+        });
+    }
+
+}
+export { signupController, loginController, addToCart, deleteFromCartController, addAddress, ordersControllers };

@@ -91,7 +91,12 @@ class _CartScreenState extends State<CartScreen> {
                 text:
                     "Procced to Buy (${SharedServices.getLoginDetails()!.user!.cart!.length})",
                 onTap: () {
-                  Navigator.pushNamed(context, AddressScreen.routeName);
+                  SharedServices.getLoginDetails()!.user!.cart!.length == 0
+                      ? () {}
+                      : Navigator.pushNamed(
+                          context,
+                          AddressScreen.routeName,
+                        );
                 }),
           ),
           const SizedBox(

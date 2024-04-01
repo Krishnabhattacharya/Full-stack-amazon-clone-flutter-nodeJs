@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:amazon_clone/constant/global_variable.dart';
+import 'package:amazon_clone/screens/payment/payment_screen.dart';
 import 'package:amazon_clone/services/ApiServices/ApiServices.dart';
 import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';
 import 'package:amazon_clone/widgets/reuseable_widgets.dart/custom_button.dart';
@@ -22,7 +23,7 @@ class _AddressScreenState extends State<AddressScreen> {
   TextEditingController t3 = TextEditingController();
   TextEditingController t4 = TextEditingController();
   final formKey = GlobalKey<FormState>();
-
+  bool isSelected = false;
   @override
   void dispose() {
     super.dispose();
@@ -72,20 +73,30 @@ class _AddressScreenState extends State<AddressScreen> {
             ? SingleChildScrollView(
                 child: Column(
                   children: [
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 10.0, left: 10, right: 10),
-                      child: Container(
-                        width: double.infinity,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                        ),
-                        child: Center(
-                          child: Text(SharedServices.getLoginDetails()!
-                              .user!
-                              .address
-                              .toString()),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          isSelected = !isSelected;
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            top: 10.0, left: 10, right: 10),
+                        child: Container(
+                          width: double.infinity,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: isSelected
+                                    ? GlobalVariables.secondaryColor
+                                    : Colors.black),
+                          ),
+                          child: Center(
+                            child: Text(SharedServices.getLoginDetails()!
+                                .user!
+                                .address
+                                .toString()),
+                          ),
                         ),
                       ),
                     ),
@@ -152,21 +163,26 @@ class _AddressScreenState extends State<AddressScreen> {
                             ],
                           )),
                     ),
-                    CustomButton(
-                        text: "ok",
-                        onTap: () {
-                          if (formKey.currentState!.validate() &&
-                              SharedServices.getLoginDetails()!
+                    Padding(
+                      padding: const EdgeInsets.all(8.10),
+                      child: CustomButton(
+                          color: GlobalVariables.secondaryColor,
+                          text: "Proceed",
+                          onTap: () {
+                            if (isSelected) {
+                              Navigator.pushNamed(
+                                  context, PaymentScreen.routeName);
+                            } else if (formKey.currentState!.validate() &&
+                                SharedServices.getLoginDetails()!
+                                    .user!
+                                    .address!
+                                    .isEmpty) {
+                              payPressed(SharedServices.getLoginDetails()!
                                   .user!
-                                  .address!
-                                  .isEmpty) {
-                            payPressed(SharedServices.getLoginDetails()!
-                                .user!
-                                .address!);
-                          } else {
-                            log("else");
-                          }
-                        })
+                                  .address!);
+                            }
+                          }),
+                    )
                   ],
                 ),
               )
@@ -220,7 +236,8 @@ class _AddressScreenState extends State<AddressScreen> {
                           height: 9,
                         ),
                         CustomButton(
-                            text: "ok",
+                            //  color: GlobalVariables.secondaryColor,
+                            text: "proceed",
                             onTap: () {
                               if (formKey.currentState!.validate()) {
                                 payPressed(SharedServices.getLoginDetails()!

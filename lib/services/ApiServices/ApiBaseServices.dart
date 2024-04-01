@@ -113,11 +113,7 @@ class ApiBaseServices {
     Map<String, String> newHeaders = {};
     Map<String, String> conentType = {'Content-Type': 'application/json'};
     newHeaders.addAll(conentType);
-    if (SharedServices.isLoggedIn()) {
-      // LoginModel? model = SharedServices.getLoginDetails();
-      // String token = model!.token.toString();
-      // newHeaders.addAll({'Authorization': token});
-    }
+    if (SharedServices.isLoggedIn()) {}
     log("newheaders$newHeaders");
     final response = await dio.post(
       url(extendedURL: endPoint),

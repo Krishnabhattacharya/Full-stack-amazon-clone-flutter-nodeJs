@@ -1,3 +1,4 @@
+import Order from "../model/order.js";
 import { Product } from "../model/productModel.js";
 
 const adminControllerAddProduct = async (req, res) => {
@@ -55,5 +56,18 @@ const adminControllerDeleteProduct = async (req, res) => {
         });
     }
 };
-
-export { adminControllerAddProduct, adminControllerGetProduct, adminControllerDeleteProduct };
+const adminGetAllOrders = async (req, res) => {
+    try {
+        const orders = await Order.find({});
+        res.status(200).send({
+            success: true,
+            products: orders
+        })
+    } catch (error) {
+        res.status(500).send({
+            success: false,
+            message: `error in get admin product ${error.message}`
+        })
+    }
+}
+export { adminControllerAddProduct, adminControllerGetProduct, adminControllerDeleteProduct, adminGetAllOrders };

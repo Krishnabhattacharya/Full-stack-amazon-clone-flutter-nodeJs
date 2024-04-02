@@ -2,12 +2,9 @@
     <application
         android:label="amazon_clone"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
-        <application
-		android:label="flutter_stripe_template"
-		android:name="${applicationName}"
-		android:icon="@mipmap/ic_launcher"
-		android:enableOnBackInvokedCallback="true"> 
+        android:icon="@mipmap/ic_launcher"
+        android:enableOnBackInvokedCallback="true"> 
+      
 <!-- This line you need to add in your manifest file -->
         <activity
             android:name=".MainActivity"

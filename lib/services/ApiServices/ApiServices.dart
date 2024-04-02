@@ -2,13 +2,16 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:amazon_clone/constant/dio_error.dart';
+import 'package:amazon_clone/model/order_model.dart';
 import 'package:amazon_clone/model/product_model.dart';
 import 'package:amazon_clone/model/Auth_models/user_model.dart';
 import 'package:amazon_clone/services/ApiServices/ApiBaseServices.dart';
 import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';
+import 'package:amazon_clone/services/provider/auth_provider.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Apiservices {
   static Future<bool> loginUser({
@@ -29,6 +32,10 @@ class Apiservices {
       if (response.statusCode == 201 || response.statusCode == 200) {
         node = userModelFromJson(jsonEncode(response.data));
         SharedServices.setLoginDetails(node);
+        Future.delayed(Duration.zero, () {
+          Provider.of<AuthProvider>(context, listen: false)
+              .setLoginDetails(node.user!);
+        });
         res = true;
       }
       return res;
@@ -262,7 +269,14 @@ class Apiservices {
           });
 
       userModel = userModelFromJson(jsonEncode(res.data));
+      Future.delayed(Duration.zero, () {
+        User user = Provider.of<AuthProvider>(context, listen: false)
+            .loginmodel!
+            .copyWith(cart: userModel.user!.cart);
 
+        Provider.of<AuthProvider>(context, listen: false).setLoginDetails(user);
+      });
+      SharedServices.updateCart(userModel.user!.cart!);
       return userModel;
     } catch (e) {
       if (e is DioException) {
@@ -292,7 +306,14 @@ class Apiservices {
           });
 
       userModel = userModelFromJson(jsonEncode(res.data));
+      Future.delayed(Duration.zero, () {
+        User user = Provider.of<AuthProvider>(context, listen: false)
+            .loginmodel!
+            .copyWith(cart: userModel.user!.cart);
 
+        Provider.of<AuthProvider>(context, listen: false).setLoginDetails(user);
+      });
+      SharedServices.updateCart(userModel.user!.cart!);
       return userModel;
     } catch (e) {
       if (e is DioException) {
@@ -323,8 +344,15 @@ class Apiservices {
       // log("heloo");
       log(jsonEncode(response.data));
       if (response.statusCode == 201 || response.statusCode == 200) {
-        //  userModelFromJson(jsonEncode(response.data));
         SharedServices.updateAddress(address);
+        Future.delayed(Duration.zero, () {
+          User user = Provider.of<AuthProvider>(context, listen: false)
+              .loginmodel!
+              .copyWith(address: address);
+
+          Provider.of<AuthProvider>(context, listen: false)
+              .setLoginDetails(user);
+        });
       }
       // return res;
     } catch (e) {
@@ -337,7 +365,109 @@ class Apiservices {
       } else {
         log("Exception: $e");
       }
+    }
+  }
+
+  //place order--------------------------------------------------------------
+  static Future<void> placeOrder({
+    required String address,
+    required BuildContext context,
+    required int price,
+  }) async {
+    try {
+      final response = await ApiBaseServices.postRequestWithHeader(
+          endPoint: "/api/orders",
+          body: {
+            'cart': SharedServices.getLoginDetails()!.user!.cart,
+            'address': SharedServices.getLoginDetails()!.user!.address,
+            'price': price
+          });
+      log(jsonEncode(response.data));
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        SharedServices.updateCart([]);
+      }
+      Future.delayed(Duration.zero, () {
+        User user = Provider.of<AuthProvider>(context, listen: false)
+            .loginmodel!
+            .copyWith(cart: []);
+
+        Provider.of<AuthProvider>(context, listen: false).setLoginDetails(user);
+      });
+
+      // return res;
+    } catch (e) {
+      if (e is DioException) {
+        final errorMessage = DioErrorHandling.handleDioError(e);
+        Future.delayed(Duration.zero, () {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(errorMessage.toString())));
+        });
+      } else {
+        log("Exception: $e");
+      }
       // return false;
+    }
+  }
+
+  //get my orders------------------------------------------------------------------------
+  static Future<List<OrderModelProduct>> getAllOrders(
+      {required BuildContext context}) async {
+    List<OrderModelProduct> orders = [];
+    try {
+      final response = await ApiBaseServices.getRequestWithHeaders(
+          endPoint: "/api/get-orders");
+
+      log(response.statusCode.toString());
+
+      if (response.statusCode == 200) {
+        final res = orderModelFromJson(jsonEncode(response.data));
+        orders = res.products!;
+        return orders;
+      } else {
+        log("Error: ${response.statusCode}");
+        return orders;
+      }
+    } catch (e) {
+      if (e is DioException) {
+        final errorMessage = DioErrorHandling.handleDioError(e);
+        Future.delayed(Duration.zero, () {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(errorMessage.toString())));
+        });
+      } else {
+        log("Exception: $e");
+      }
+
+      return orders;
+    }
+  }
+
+  //admin get all orders-----------------------------------------------------
+  static Future<List<OrderModelProduct>> adminGetAllOrders(
+      BuildContext context) async {
+    List<OrderModelProduct> orders = [];
+    try {
+      final resposnse = await ApiBaseServices.getRequestWithHeaders(
+          endPoint: "/admin/get-product");
+      log(resposnse.statusCode.toString());
+      if (resposnse.statusCode == 200) {
+        final res = orderModelFromJson(jsonEncode(resposnse.data));
+        orders = res.products!;
+        log(res.toString());
+        return orders;
+      }
+      return orders;
+    } catch (e) {
+      if (e is DioException) {
+        final errorMessage = DioErrorHandling.handleDioError(e);
+        Future.delayed(Duration.zero, () {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(errorMessage.toString())));
+        });
+      } else {
+        log("Exception: $e");
+      }
+      return orders;
     }
   }
 }

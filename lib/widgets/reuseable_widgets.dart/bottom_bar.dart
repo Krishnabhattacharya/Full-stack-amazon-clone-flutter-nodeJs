@@ -5,6 +5,8 @@ import 'package:amazon_clone/screens/account/account_screen.dart';
 import 'package:amazon_clone/screens/home/cart_screen.dart';
 import 'package:amazon_clone/screens/home/home_screen.dart';
 import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';
+import 'package:amazon_clone/services/provider/api_services_provider.dart';
+import 'package:amazon_clone/services/provider/auth_provider.dart';
 import 'package:amazon_clone/services/provider/bottom_bar_index_change_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +22,14 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Provider.of<AuthProvider>(context, listen: false)
+        .setLoginDetails(SharedServices.getLoginDetails()!.user!);
+  }
+
   List screens = [
     const HomePage(),
     const AccountScreen(),
@@ -28,8 +38,10 @@ class _BottomBarState extends State<BottomBar> {
   ];
   double bottomBarWidth = 42;
   double bottomBarBorderWidth = 5;
+
   @override
   Widget build(BuildContext context) {
+    final user = context.watch<AuthProvider>().loginmodel;
     log("rebuild from bottom");
     // final updatePage = Provider.of<BottobarIndexChange>(context, listen: false);
     return Consumer<BottobarIndexChange>(builder: (context, value, child) {
@@ -102,8 +114,7 @@ class _BottomBarState extends State<BottomBar> {
                   ),
                   child: badges.Badge(
                     //   elevation: 0,
-                    badgeContent: Text(
-                        "${SharedServices.getLoginDetails()!.user!.cart!.length}"),
+                    badgeContent: Text(user?.cart?.length.toString() ?? "0"),
                     badgeStyle: const badges.BadgeStyle(
                       badgeColor: Colors.white,
                     ),

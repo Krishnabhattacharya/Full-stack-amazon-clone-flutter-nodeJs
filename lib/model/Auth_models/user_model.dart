@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 
 UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
@@ -88,6 +86,29 @@ class User {
             ? []
             : List<dynamic>.from(cart!.map((x) => x.toJson())),
       };
+  User copyWith({
+    String? id,
+    String? name,
+    String? email,
+    String? address,
+    String? type,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    int? v,
+    List<Cart>? cart,
+  }) {
+    return User(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      address: address ?? this.address,
+      type: type ?? this.type,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      v: v ?? this.v,
+      cart: cart ?? this.cart,
+    );
+  }
 }
 
 class Cart {

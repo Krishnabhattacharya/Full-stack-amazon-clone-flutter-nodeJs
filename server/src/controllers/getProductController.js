@@ -22,27 +22,33 @@ const dealOfTheDayProduct = async (req, res) => {
     try {
         let products = await Product.find({});
         products = products.sort((a, b) => {
-            let x = 0;
-            let y = 0;
-            for (let index = 0; index < a.ratings.length; index++) {
-                x += a.ratings[index].rating;
+            const avgRatingA = calculateAverageRating(a);
+            const avgRatingB = calculateAverageRating(b);
+            return avgRatingB - avgRatingA;
+        });
 
-            }
-            for (let index = 0; index < b.ratings.length; index++) {
-                y += b.ratings[index].rating;
-
-            }
-            return x < y ? 1 : -1;
-        })
         res.status(200).send({
             success: true,
             products: products
-        })
+        });
     } catch (error) {
         res.status(500).send({
-            succes: false,
+            success: false,
             message: error.message
-        })
+        });
     }
-}
+};
+
+const calculateAverageRating = (product) => {
+    if (!product.ratings || product.ratings.length === 0) {
+        return 0;
+    }
+    // const totalRating = product.ratings.reduce((acc, rating) => acc + rating.rating, 0);
+    let totalRating = 0;
+    for (let i = 0; i < product.ratings.length; i++) {
+        totalRating += product.ratings[i].rating;
+    }
+    return totalRating / product.ratings.length;
+};
+
 export { getProductController, dealOfTheDayProduct };

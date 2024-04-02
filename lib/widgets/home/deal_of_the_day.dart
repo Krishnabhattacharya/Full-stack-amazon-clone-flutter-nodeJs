@@ -1,5 +1,6 @@
 import 'package:amazon_clone/screens/product_details/product_details_screen.dart';
 import 'package:amazon_clone/services/provider/api_services_provider.dart';
+import 'package:amazon_clone/services/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,8 @@ class _DealOfTheDayState extends State<DealOfTheDay> {
   void initState() {
     super.initState();
     _fetchDealOfTheDay();
+    final user = Provider.of<AuthProvider>(context, listen: false).loginmodel;
+    print(user);
   }
 
   Future<void> _fetchDealOfTheDay() async {

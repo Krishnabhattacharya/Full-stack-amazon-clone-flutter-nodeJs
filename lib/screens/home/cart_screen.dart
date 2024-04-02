@@ -1,12 +1,13 @@
 import 'package:amazon_clone/constant/global_variable.dart';
 import 'package:amazon_clone/screens/address/address_screen.dart';
 import 'package:amazon_clone/screens/home/search_screen.dart';
-import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';
+import 'package:amazon_clone/services/provider/auth_provider.dart';
 import 'package:amazon_clone/widgets/cart/cart_product.dart';
 import 'package:amazon_clone/widgets/cart/cart_quntatity_widget.dart';
 import 'package:amazon_clone/widgets/home/address_box.dart';
 import 'package:amazon_clone/widgets/reuseable_widgets.dart/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -18,6 +19,7 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
+    final user = context.watch<AuthProvider>();
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
@@ -80,44 +82,52 @@ class _CartScreenState extends State<CartScreen> {
           )),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(children: [
-          const AddressBoxWidget(),
-          const CartQuantityWidget(),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CustomButton(
-                color: Colors.yellow[600],
-                text:
-                    "Procced to Buy (${SharedServices.getLoginDetails()!.user!.cart!.length})",
-                onTap: () {
-                  SharedServices.getLoginDetails()!.user!.cart!.length == 0
-                      ? () {}
-                      : Navigator.pushNamed(
-                          context,
-                          AddressScreen.routeName,
+      body: user.loginmodel?.cart == null
+          ? const Center(child: Text("Cart is Empty"))
+          : SingleChildScrollView(
+              child: Column(children: [
+                const AddressBoxWidget(),
+                const CartQuantityWidget(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CustomButton(
+                      color: Colors.yellow[600],
+                      text:
+                          "Procced to Buy (${user!.loginmodel!.cart!.length})",
+                      onTap: () {
+                        user?.loginmodel?.cart?.length == 0
+                            ? () {}
+                            : Navigator.pushNamed(
+                                context,
+                                AddressScreen.routeName,
+                              );
+                      }),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Divider(
+                  color: Color.fromARGB(255, 218, 218, 218),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  //height: double.infinity,
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: user.loginmodel!.cart!.length,
+                      itemBuilder: (context, index) {
+                        return SizedBox(
+                          height: 200,
+                          child: Cartproduct(
+                            index: index,
+                          ),
                         );
-                }),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          const Divider(
-            color: Color.fromARGB(255, 218, 218, 218),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          ListView.builder(
-              shrinkWrap: true,
-              itemCount: SharedServices.getLoginDetails()!.user!.cart!.length,
-              itemBuilder: (context, index) {
-                return Cartproduct(
-                  index: index,
-                );
-              })
-        ]),
-      ),
+                      }),
+                )
+              ]),
+            ),
     );
   }
 }

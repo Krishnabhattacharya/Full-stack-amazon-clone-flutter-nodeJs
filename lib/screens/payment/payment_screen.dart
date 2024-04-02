@@ -49,7 +49,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               shape: Border.all(
                   width: 0.5, color: const Color.fromARGB(255, 203, 203, 203)),
               child: ListTile(
-                title: const Text('Card'),
+                title: const Text('Online payment'),
                 leading: Radio<String>(
                   value: 'Credit Card',
                   groupValue: _selectedPaymentMethod,
@@ -57,24 +57,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     setState(() {
                       _selectedPaymentMethod = value;
                       // Perform operations for credit card payment method
-                    });
-                  },
-                ),
-              ),
-            ),
-            Card(
-              elevation: 0,
-              shape: Border.all(
-                  width: 0.5, color: const Color.fromARGB(255, 203, 203, 203)),
-              child: ListTile(
-                title: const Text('Google pay'),
-                leading: Radio<String>(
-                  value: 'Google pay',
-                  groupValue: _selectedPaymentMethod,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedPaymentMethod = value;
-                      // Perform operations for PayPal payment method
                     });
                   },
                 ),
@@ -109,7 +91,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         MaterialPageRoute(
                             builder: (context) => PaymentDetailsScreen()))
                     : ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Select Card Option")));
+                        const SnackBar(content: Text("Select online payment")));
               },
               color: GlobalVariables.secondaryColor,
             )

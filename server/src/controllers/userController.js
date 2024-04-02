@@ -2,6 +2,7 @@ import User from "../model/userModel.js";
 import bcrypt from 'bcryptjs';
 import validator from "validator";
 import { Product } from "../model/productModel.js";
+import Order from "../model/order.js";
 const signupController = async (req, res) => {
     const { name, email, password } = req.body;
     const existingUser = await User.findOne({ email });
@@ -163,10 +164,43 @@ const addAddress = async (req, res) => {
 const ordersControllers = async (req, res) => {
     try {
         const { cart, price, address } = req.body;
-        // let user = await User.findById(req.user._id);
-        // user.address = address;
-        // await user.save();
-        res.status(200).send({ success: true, user: user });
+        let products = [];
+        console.log(cart);
+        for (let index = 0; index < cart.length; index++) {
+            let product = await Product.findById(cart[index].product._id);
+            console.log("hiiii");
+            console.log(product);
+            if (!product) {
+                return res.status(400).send({ message: "Product not found" });
+            }
+            if (product.quantity >= cart[index].cartQuantity) {
+                product.quantity -= cart[index].cartQuantity;
+                products.push({ product, quantity: cart[index].cartQuantity });
+                await product.save();
+
+            }
+            else {
+                res.send({ message: `${product.name} is out of stock` });
+            }
+
+        }
+        let user = await User.findById(req.user._id);
+        user.cart = [];
+        //  console.log("hiii");
+        await user.save();
+        let order = new Order({
+            products,
+            price,
+            address,
+            userId: req.user._id,
+            orderAt: new Date().getTime(),
+        })
+        //  console.log(order);
+        order = await order.save();
+        res.status(200).send({
+            success: true,
+            order: order
+        })
     } catch (error) {
         return res.status(500).send({
             success: false,
@@ -175,4 +209,23 @@ const ordersControllers = async (req, res) => {
     }
 
 }
-export { signupController, loginController, addToCart, deleteFromCartController, addAddress, ordersControllers };
+const getOrdersController = async (req, res) => {
+    const id = req.user._id;
+    try {
+        const products = await Order.find({ userId: id });
+        if (!products) {
+            Error("No products found");
+        }
+        res.status(200).send({
+            success: true,
+            products: products
+        })
+    } catch (error) {
+        res.status(500).send({
+            success: false,
+            message: error.message
+        })
+    }
+
+}
+export { signupController, loginController, addToCart, deleteFromCartController, addAddress, ordersControllers, getOrdersController };

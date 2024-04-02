@@ -1,3 +1,4 @@
+import 'package:amazon_clone/admin/screen/all_orders.dart';
 import 'package:amazon_clone/constant/global_variable.dart';
 import 'package:amazon_clone/admin/screen/post_screen.dart';
 import 'package:amazon_clone/screens/auth/auth_screen.dart';
@@ -19,7 +20,7 @@ class _AdminScreenState extends State<AdminScreen> {
   double bottomBarWidth = 42;
   double bottomBarBorderWidth = 5;
 
-  List<Widget> pages = [PostScreen(), LogOut(), Text("1")];
+  List<Widget> pages = [PostScreen(), LogOut(), OrdersScreen()];
   @override
   Widget build(BuildContext context) {
     return Consumer<BottobarIndexChange>(builder: (context, value, child) {

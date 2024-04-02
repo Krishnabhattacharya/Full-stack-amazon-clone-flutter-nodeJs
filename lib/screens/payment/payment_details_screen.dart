@@ -1,10 +1,14 @@
 import 'dart:developer';
 
 import 'package:amazon_clone/constant/global_variable.dart';
+import 'package:amazon_clone/screens/payment/razorpay_service.dart';
 import 'package:amazon_clone/screens/payment/stripe_service.dart';
+import 'package:amazon_clone/services/ApiServices/ApiServices.dart';
 import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';
+import 'package:amazon_clone/services/provider/auth_provider.dart';
 import 'package:amazon_clone/widgets/reuseable_widgets.dart/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PaymentDetailsScreen extends StatefulWidget {
   const PaymentDetailsScreen({
@@ -20,12 +24,35 @@ class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
   @override
   void initState() {
     super.initState();
+    RazorpayService.initRazorPay(
+      onError: (error) {
+        print("Payment Error: ${error.message}");
+      },
+      onSuccess: (success) async {
+        await Apiservices.placeOrder(
+            address: Provider.of<AuthProvider>(context, listen: false)
+                .loginmodel!
+                .address!,
+            context: context,
+            price: sum);
+      },
+      onExternalWallet: (wallet) {
+        print("External Wallet: ${wallet.walletName}");
+      },
+    );
     price();
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    RazorpayService.clear();
+  }
+
   void price() {
-    SharedServices.getLoginDetails()!
-        .user!
+    Provider.of<AuthProvider>(context, listen: false)
+        .loginmodel!
         .cart!
         .map((e) => sum += (e.cartQuantity)! * (e.product!.price)!)
         .toList();
@@ -210,8 +237,8 @@ class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
               padding: const EdgeInsets.all(12.0),
               child: CustomButton(
                 text: "Place your Order",
-                onTap: () async {
-                  await StripeService.makePayment();
+                onTap: () {
+                  RazorpayService.openCheckout(sum.toString(), context);
                 },
                 color: const Color.fromARGB(255, 230, 207, 0),
               ),

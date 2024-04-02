@@ -235,16 +235,29 @@ class _AddressScreenState extends State<AddressScreen> {
                         const SizedBox(
                           height: 9,
                         ),
-                        CustomButton(
-                            //  color: GlobalVariables.secondaryColor,
-                            text: "proceed",
-                            onTap: () {
-                              if (formKey.currentState!.validate()) {
-                                payPressed(SharedServices.getLoginDetails()!
-                                    .user!
-                                    .address!);
-                              }
-                            })
+                        // CustomButton(
+                        //     //  color: GlobalVariables.secondaryColor,
+                        //     text: "proceed",
+                        //     onTap: () {
+                        //       if (formKey.currentState!.validate()) {
+                        //         payPressed(SharedServices.getLoginDetails()!
+                        //             .user!
+                        //             .address!);
+                        //       }
+                        //     })
+                        Padding(
+                          padding: const EdgeInsets.all(8.10),
+                          child: CustomButton(
+                              color: GlobalVariables.secondaryColor,
+                              text: "Proceed",
+                              onTap: () {
+                                if (formKey.currentState!.validate()) {
+                                  payPressed(SharedServices.getLoginDetails()!
+                                      .user!
+                                      .address!);
+                                }
+                              }),
+                        )
                       ],
                     )),
               ),

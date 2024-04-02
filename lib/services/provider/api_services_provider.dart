@@ -1,10 +1,13 @@
 import 'dart:developer';
 
 import 'package:amazon_clone/model/Auth_models/user_model.dart';
+import 'package:amazon_clone/model/order_model.dart';
 import 'package:amazon_clone/model/product_model.dart';
 import 'package:amazon_clone/services/ApiServices/ApiServices.dart';
 import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';
+import 'package:amazon_clone/services/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ApiProviderServices extends ChangeNotifier {
   // Future<ProductModel> getAllProductProvider(BuildContext context) async {
@@ -45,7 +48,8 @@ class ApiProviderServices extends ChangeNotifier {
     double totalRating = 0;
     for (var i = 0; i < product.rating!.length; i++) {
       totalRating += product.rating![i].rating!;
-      if (product.rating![i].id == SharedServices.getLoginDetails()!.user!.id) {
+      if (product.rating![i].id ==
+          Provider.of<AuthProvider>(context, listen: false).loginmodel!.id) {
         _myRating = product.rating![i].rating!;
       }
     }
@@ -66,18 +70,19 @@ class ApiProviderServices extends ChangeNotifier {
     notifyListeners();
   }
 
-  //---------------------------------------------------------------------
-  final UserModel _userModel = SharedServices.getLoginDetails()!;
-  UserModelProduct _singleProduct = UserModelProduct();
-  List<Cart> get cart => _userModel.user!.cart!;
-  void setSingleProduct(int index) {
-    _singleProduct = _userModel.user!.cart![index].product!;
+  //-----------------------------------------------------------
+  List<OrderModelProduct> _orders = [];
+  List<OrderModelProduct> get orders => _orders;
+  void getOrders(BuildContext context) async {
+    _orders = await Apiservices.getAllOrders(context: context);
+    notifyListeners();
   }
 
-  UserModelProduct get singleProduct => _singleProduct;
-
-  void increaseQuantity(BuildContext context) async {
-    await Apiservices.addToCart(context: context, product: _singleProduct);
+  //-------------------------------------------------------------
+  List<OrderModelProduct> _admiorders = [];
+  List<OrderModelProduct> get adminorders => _admiorders;
+  void getadminOrders(BuildContext context) async {
+    _admiorders = await Apiservices.adminGetAllOrders(context);
     notifyListeners();
   }
 }

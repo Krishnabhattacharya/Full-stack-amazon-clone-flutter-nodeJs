@@ -4,7 +4,8 @@ import 'package:amazon_clone/model/product_model.dart';
 
 OrderModel orderModelFromJson(String str) =>
     OrderModel.fromJson(json.decode(str));
-
+OrderModelProduct orderModelProductFromJson(String str) =>
+    OrderModelProduct.fromJson(json.decode(str));
 String orderModelToJson(OrderModel data) => json.encode(data.toJson());
 
 class OrderModel {

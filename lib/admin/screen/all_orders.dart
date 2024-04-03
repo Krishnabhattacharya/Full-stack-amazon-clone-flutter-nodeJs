@@ -17,7 +17,6 @@ class OrdersScreen extends StatefulWidget {
 class _OrdersScreenState extends State<OrdersScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Provider.of<ApiProviderServices>(context, listen: false)
         .getadminOrders(context);
@@ -26,8 +25,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ApiProviderServices>(builder: (context, value, child) {
-      log("llll" + value.adminorders.length.toString());
-      log("llll  " + value.adminorders[0].address.toString());
       return value.adminorders.isEmpty
           ? const CircularProgressIndicator()
           : GridView.builder(
@@ -36,7 +33,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   crossAxisCount: 2),
               itemBuilder: (context, index) {
                 final orderData = value.adminorders[index];
-                log("kkkkkk" + orderData.address.toString());
+                // log("kkkkkk" + orderData.address.toString());
                 return GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(

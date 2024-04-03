@@ -448,12 +448,12 @@ class Apiservices {
     List<OrderModelProduct> orders = [];
     try {
       final resposnse = await ApiBaseServices.getRequestWithHeaders(
-          endPoint: "/admin/get-product");
+          endPoint: "/admin/get-all-orders");
       log(resposnse.statusCode.toString());
       if (resposnse.statusCode == 200) {
         final res = orderModelFromJson(jsonEncode(resposnse.data));
         orders = res.products!;
-        log(res.toString());
+        log(resposnse.data.toString());
         return orders;
       }
       return orders;
@@ -469,5 +469,64 @@ class Apiservices {
       }
       return orders;
     }
+  }
+
+  //update status-------------------------------------------------------------------------------------
+  static Future<OrderModelProduct> updateOrderStatus(
+      {required int status,
+      required BuildContext context,
+      required OrderModelProduct order}) async {
+    OrderModelProduct ordr = OrderModelProduct();
+    try {
+      final response = await ApiBaseServices.postRequestWithHeader(
+          endPoint: "/admin/update-status",
+          body: {'id': order.id, 'status': status});
+      log(jsonEncode(response.data));
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        ordr = orderModelProductFromJson(response.data);
+      }
+      return ordr;
+    } catch (e) {
+      if (e is DioException) {
+        final errorMessage = DioErrorHandling.handleDioError(e);
+        Future.delayed(Duration.zero, () {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(errorMessage.toString())));
+        });
+      } else {
+        log("Exception: $e");
+      }
+      return ordr;
+    }
+  }
+
+  //-------------------------------------------------------------------
+  //get analytic details in admin
+  static Future<Map<String, dynamic>> analyticDetails({
+    required BuildContext context,
+  }) async {
+    late Map<String, dynamic> res;
+    try {
+      final response = await ApiBaseServices.getRequestWithHeaders(
+        endPoint: "/admin/get-total-earnings",
+      );
+      if (response.statusCode == 200) {
+        res = response.data;
+      } else {
+        log("Error: ${response.statusCode}");
+      }
+      return res;
+    } catch (e) {
+      if (e is DioException) {
+        final errorMessage = DioErrorHandling.handleDioError(e);
+        Future.delayed(Duration.zero, () {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(errorMessage.toString())));
+        });
+      } else {
+        log("Exception: $e");
+      }
+    }
+    return res;
   }
 }

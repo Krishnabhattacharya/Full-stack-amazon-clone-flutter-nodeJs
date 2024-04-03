@@ -85,4 +85,13 @@ class ApiProviderServices extends ChangeNotifier {
     _admiorders = await Apiservices.adminGetAllOrders(context);
     notifyListeners();
   }
+
+  //-----------------------------------------------------------
+  Map<String, dynamic>? _data;
+
+  Map<String, dynamic>? get data => _data;
+  void fetchAnalytics(BuildContext context) async {
+    _data = await Apiservices.analyticDetails(context: context);
+    notifyListeners();
+  }
 }

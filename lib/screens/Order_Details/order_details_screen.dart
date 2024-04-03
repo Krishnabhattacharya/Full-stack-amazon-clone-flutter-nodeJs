@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:amazon_clone/constant/global_variable.dart';
 import 'package:amazon_clone/model/order_model.dart';
 import 'package:amazon_clone/screens/home/search_screen.dart';
+import 'package:amazon_clone/services/ApiServices/ApiServices.dart';
+import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';
 import 'package:amazon_clone/services/provider/auth_provider.dart';
 import 'package:amazon_clone/widgets/reuseable_widgets.dart/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -27,21 +29,21 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   @override
   void initState() {
     super.initState();
-    log(widget.order.address.toString());
-    currentStep = widget.order.status!;
+    log(widget.order.status.toString());
+    setState(() {
+      currentStep = widget.order.status!;
+    });
   }
 
-  void changeOrderStatus(int status) {
-    // adminServices.changeOrderStatus(
-    //   context: context,
-    //   status: status + 1,
-    //   order: widget.order,
-    //   onSuccess: () {
-    //     setState(() {
-    //       currentStep += 1;
-    //     });
-    //   },
-    // );
+  void changeOrderStatus(int status) async {
+    await Apiservices.updateOrderStatus(
+      context: context,
+      status: status + 1,
+      order: widget.order,
+    );
+    setState(() {
+      currentStep++;
+    });
   }
 
   @override
@@ -224,8 +226,11 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 child: Stepper(
                   currentStep: currentStep,
                   controlsBuilder: (context, details) {
-                    if (user.loginmodel!.type == 'admin') {
+                    if (SharedServices.getLoginDetails()!.user!.type ==
+                        'admin') {
+                      log("hii");
                       return CustomButton(
+                        color: GlobalVariables.secondaryColor,
                         text: 'Done',
                         onTap: () => changeOrderStatus(details.currentStep),
                       );

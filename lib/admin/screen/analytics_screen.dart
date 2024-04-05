@@ -21,7 +21,7 @@ class _AnalyticScreenState extends State<AnalyticScreen> {
     super.initState();
     Provider.of<ApiProviderServices>(context, listen: false)
         .fetchAnalytics(context);
-    data = []; // Initialize data list
+    data = [];
   }
 
   @override
@@ -37,7 +37,6 @@ class _AnalyticScreenState extends State<AnalyticScreen> {
       final booksEarnings = earnings['booksEarnings'];
       final fashionEarnings = earnings['fashionEarnings'];
 
-      // Populate data list with earnings data
       data = [
         _ChartData('Mobile', mobileEarnings.toDouble()),
         _ChartData('Essential', essentialEarnings.toDouble()),

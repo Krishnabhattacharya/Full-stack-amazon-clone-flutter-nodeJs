@@ -8,6 +8,7 @@ import 'package:amazon_clone/services/SharedServices/Sharedservices.dart';
 import 'package:amazon_clone/services/provider/api_services_provider.dart';
 import 'package:amazon_clone/services/provider/auth_provider.dart';
 import 'package:amazon_clone/services/provider/bottom_bar_index_change_provider.dart';
+import 'package:amazon_clone/screens/home/demo_last_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:badges/badges.dart' as badges;
@@ -34,7 +35,7 @@ class _BottomBarState extends State<BottomBar> {
     const HomePage(),
     const AccountScreen(),
     const CartScreen(),
-    Container(),
+    const DemoLastScreen(),
   ];
   double bottomBarWidth = 42;
   double bottomBarBorderWidth = 5;

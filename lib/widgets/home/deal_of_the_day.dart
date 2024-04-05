@@ -49,10 +49,10 @@ class _DealOfTheDayState extends State<DealOfTheDay> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Padding(
-                padding: EdgeInsets.only(left: 10, top: 15),
+                padding: EdgeInsets.only(left: 10, top: 0, bottom: 8),
                 child: Text(
                   "Deal of the Day",
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
                 ),
               ),
               Image.network(

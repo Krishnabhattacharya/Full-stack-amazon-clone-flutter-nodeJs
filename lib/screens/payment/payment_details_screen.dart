@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:amazon_clone/constant/global_variable.dart';
+import 'package:amazon_clone/screens/home/home_screen.dart';
 import 'package:amazon_clone/screens/payment/razorpay_service.dart';
 import 'package:amazon_clone/screens/payment/stripe_service.dart';
 import 'package:amazon_clone/services/ApiServices/ApiServices.dart';
@@ -35,6 +36,7 @@ class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
                 .address!,
             context: context,
             price: sum);
+        Navigator.pushReplacementNamed(context, HomePage.routeName);
       },
       onExternalWallet: (wallet) {
         print("External Wallet: ${wallet.walletName}");

@@ -1,15 +1,9 @@
 import 'package:amazon_clone/constant/global_variable.dart';
 import 'package:amazon_clone/screens/home/search_screen.dart';
-import 'package:amazon_clone/widgets/home/address_box.dart';
-import 'package:amazon_clone/widgets/home/carousel_slider.dart';
-import 'package:amazon_clone/widgets/home/deal_of_the_day.dart';
-import 'package:amazon_clone/widgets/home/payment_box.dart';
-import 'package:amazon_clone/widgets/home/top_catagory.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
-  static const String routeName = "/home";
-  const HomePage({super.key});
+class DemoLastScreen extends StatelessWidget {
+  const DemoLastScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -75,22 +69,12 @@ class HomePage extends StatelessWidget {
           )),
         ),
       ),
-      body: const SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AddressBoxWidget(),
-            SizedBox(
-              height: 10,
-            ),
-            TopCatagory(),
-            SizedBox(
-              height: 10,
-            ),
-            CarousalSliderImage(),
-            PaymentBox(),
-            DealOfTheDay(),
-          ],
+      body: Container(
+        height: double.infinity,
+        width: double.infinity,
+        child: Image.asset(
+          "assets/images/last.png",
+          fit: BoxFit.cover,
         ),
       ),
     );

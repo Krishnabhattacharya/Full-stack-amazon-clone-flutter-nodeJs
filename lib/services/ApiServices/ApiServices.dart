@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:amazon_clone/constant/apis_end_point.dart';
 import 'package:amazon_clone/constant/dio_error.dart';
 import 'package:amazon_clone/model/order_model.dart';
 import 'package:amazon_clone/model/product_model.dart';
@@ -23,7 +24,7 @@ class Apiservices {
     UserModel node = UserModel();
     try {
       final response = await ApiBaseServices.loginUser(
-        Exturl: "/api/auth/user/signin",
+        Exturl: ApiEndpoints.login,
         email: email,
         password: password,
       );
@@ -58,7 +59,7 @@ class Apiservices {
     ProductModel getProducts = ProductModel();
     try {
       final resposnse = await ApiBaseServices.getRequestWithHeaders(
-          endPoint: "/admin/get-product");
+          endPoint: ApiEndpoints.getAllProducts);
       log(resposnse.statusCode.toString());
       if (resposnse.statusCode == 200) {
         getProducts = productModelFromJson(jsonEncode(resposnse.data));
@@ -93,7 +94,7 @@ class Apiservices {
 
     try {
       Response res = await ApiBaseServices.postRequest(
-        endPoint: "/api/auth/user/signup",
+        endPoint: ApiEndpoints.signup,
         body: {
           "name": name,
           "email": email,
@@ -129,7 +130,7 @@ class Apiservices {
     List<Product> products = [];
     try {
       final response = await ApiBaseServices.getRequestWithHeaders(
-          endPoint: "/api/category-products?category=$category");
+          endPoint: "${ApiEndpoints.getCategoryProducts}?category=$category");
 
       log(response.statusCode.toString());
 
@@ -165,7 +166,7 @@ class Apiservices {
     List<Product> products = [];
     try {
       final response = await ApiBaseServices.getRequestWithHeaders(
-          endPoint: "/api/search-products/$category");
+          endPoint: "${ApiEndpoints.searchProducts}/$category");
 
       log(response.statusCode.toString());
 
@@ -203,7 +204,7 @@ class Apiservices {
   }) async {
     try {
       Response res = await ApiBaseServices.postRequestWithHeader(
-          endPoint: '/api/rating-products',
+          endPoint: ApiEndpoints.rateProduct,
           body: {
             'id': product.id,
             'rating': rating,
@@ -227,7 +228,7 @@ class Apiservices {
     Product product = Product();
     try {
       final response = await ApiBaseServices.getRequestWithHeaders(
-          endPoint: "/api/deal-of-day-products");
+          endPoint: ApiEndpoints.dealOfTheDay);
 
       log(response.statusCode.toString());
 
@@ -263,7 +264,7 @@ class Apiservices {
     UserModel userModel = UserModel();
     try {
       Response res = await ApiBaseServices.postRequestWithHeader(
-          endPoint: '/api/add-to-cart',
+          endPoint: ApiEndpoints.addToCart,
           body: {
             "id": product.id,
           });
@@ -300,7 +301,7 @@ class Apiservices {
     UserModel userModel = UserModel();
     try {
       Response res = await ApiBaseServices.postRequestWithHeader(
-          endPoint: '/api/delete-from-cart',
+          endPoint: ApiEndpoints.deleteFromCart,
           body: {
             "id": product.id,
           });
@@ -337,7 +338,7 @@ class Apiservices {
   }) async {
     try {
       final response = await ApiBaseServices.postRequestWithHeader(
-          endPoint: "/api/add-address",
+          endPoint: ApiEndpoints.addAddress,
           body: {
             'address': address,
           });
@@ -376,7 +377,7 @@ class Apiservices {
   }) async {
     try {
       final response = await ApiBaseServices.postRequestWithHeader(
-          endPoint: "/api/orders",
+          endPoint: ApiEndpoints.placeOrder,
           body: {
             'cart': SharedServices.getLoginDetails()!.user!.cart,
             'address': SharedServices.getLoginDetails()!.user!.address,
@@ -415,7 +416,7 @@ class Apiservices {
     List<OrderModelProduct> orders = [];
     try {
       final response = await ApiBaseServices.getRequestWithHeaders(
-          endPoint: "/api/get-orders");
+          endPoint: ApiEndpoints.getOrders);
 
       log(response.statusCode.toString());
 
@@ -448,7 +449,7 @@ class Apiservices {
     List<OrderModelProduct> orders = [];
     try {
       final resposnse = await ApiBaseServices.getRequestWithHeaders(
-          endPoint: "/admin/get-all-orders");
+          endPoint: ApiEndpoints.adminGetAllOrders);
       log(resposnse.statusCode.toString());
       if (resposnse.statusCode == 200) {
         final res = orderModelFromJson(jsonEncode(resposnse.data));
@@ -479,7 +480,7 @@ class Apiservices {
     OrderModelProduct ordr = OrderModelProduct();
     try {
       final response = await ApiBaseServices.postRequestWithHeader(
-          endPoint: "/admin/update-status",
+          endPoint: ApiEndpoints.updateOrderStatus,
           body: {'id': order.id, 'status': status});
       log(jsonEncode(response.data));
       if (response.statusCode == 201 || response.statusCode == 200) {
@@ -508,7 +509,7 @@ class Apiservices {
     late Map<String, dynamic> res;
     try {
       final response = await ApiBaseServices.getRequestWithHeaders(
-        endPoint: "/admin/get-total-earnings",
+        endPoint: ApiEndpoints.getAnalyticDetails,
       );
       if (response.statusCode == 200) {
         res = response.data;

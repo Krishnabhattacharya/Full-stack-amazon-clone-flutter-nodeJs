@@ -1,16 +1,29 @@
-# amazon_clone
+<h1>Full stack amazon clone</h1>
 
-A new Flutter project.
+<h1>USER</h1>
 
-## Getting Started
+![user_collage1](https://github.com/Krishnabhattacharya/Full-stack-amazon-clone-flutter-nodeJs/assets/99496645/fd587c3e-65cf-4fbd-8ca4-40923836458e)
 
-This project is a starting point for a Flutter application.
+![user_collage2](https://github.com/Krishnabhattacharya/Full-stack-amazon-clone-flutter-nodeJs/assets/99496645/76275fa2-c432-4887-8fa1-a980377cc0c1)
+<h1>ADMIN</h1>
 
-A few resources to get you started if this is your first Flutter project:
+![admin_collage](https://github.com/Krishnabhattacharya/Full-stack-amazon-clone-flutter-nodeJs/assets/99496645/1b77295a-0bd7-40b6-8897-b422ef3ac4b8)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<h1>frontend :: FLUTTER || backend :: NODE JS || payment :: RAZORPAY</h1>
+<h2>APIS</h2>
+<h3>REGISTER</h3>
+<h3>LOGIN</h3>
+<h3>ADMIN_ADD_PRODUCT</h3>
+<h3>ADMIN_GET_PRODUCT</h3>
+<h3>ADMIN_DELETE_PRODUCT</h3>
+<h3>ADMIN_GET_ALL_ORDERS</h3>
+<h3>ADMIN_UPDATE_ORDER_STATUS</h3>
+<h3>ADMIN_GET_ALL_ANALATIC_DETAILS</h3>
+<h3>USER_GET_CATEGORY_PRODUCT</h3>
+<h3>USER_GET_SEARCH_PRODUCT</h3>
+<h3>USER_GET_DEAL_OF_THE_DAY_PRODUCT</h3>
+<h3>USER_ADD_TO_CART_PRODUCT</h3>
+<h3>USER_DELETE_FROM_CART_PRODUCT</h3>
+<h3>USER_ADD_ADDRESS</h3>
+<h3>USER_PLACE_ORDER</h3>
+<h3>USER_GET_ALL_ORDERS</h3>

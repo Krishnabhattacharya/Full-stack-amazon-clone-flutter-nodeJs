@@ -9,8 +9,7 @@
 
 // class StripeService {
 //   String sk =
-//       //  "sk_test_51OPlQHBj29jFqCmNbhA5D1xiXhQLUd8zyvD5zKsE2m4wZaITN3Ws7kjJ4NvYiyIrY3Wa5zrc3QW6o8NSGoWDWhPy00enUsiulv"; //thai
-//           "sk_test_51P0imGSIysZLwg2E6QATEIKwaBeJjpaCAP8v2h9zUqQRefKpeMyJdsrrQAq07ifzy0X4d8GIuWlvVOUofmse6VNn004nOACmoq";
+
 //   // static Map<String, dynamic>? paymentIntent;
 
 //   // static Future<Map<String, dynamic>> createPaymentIntent(

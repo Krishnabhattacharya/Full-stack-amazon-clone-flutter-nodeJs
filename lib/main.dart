@@ -19,9 +19,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   preferences = await SharedPreferences.getInstance();
   // Stripe.publishableKey =
-  //  'pk_test_51OPlQHBj29jFqCmNolRqeZUyEhkmOkyyLOrnlYcmf8mKrGMJMmwd2T7yp40tgpPx7m5tKQTgSXL388yfgOJZmsud00FIqHlDUM'; //thai
 
-  //  "pk_test_51P0imGSIysZLwg2EJiipYmOFEYIvuE6LFek6TofrQfUYiW7BYb3vhf10eo79XKqTuj0U16vRF3s95hupyIKgzz5f00x1jDWWtG";
   runApp(const MyApp());
 }
 
